@@ -1,0 +1,19 @@
+import cv2
+import os
+
+def read_images(dir):
+    
+    images, names = [], []
+
+
+    for file in os.listdir(dir):
+        if file.lower().endswith(".png"):
+            # Leer imagen en blanco y negro
+            image = cv2.imread(os.path.join(dir, file), cv2.IMREAD_GRAYSCALE)
+            
+            if image is not None:
+                images.append(image) ; names.append(file.remove(".png"))
+            else:
+                print(f"Error al leer la imagen {file}") ; return None
+    
+    return images, names
