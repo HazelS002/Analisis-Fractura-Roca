@@ -12,7 +12,7 @@ def read_images(dir):
             image = cv2.imread(os.path.join(dir, file), cv2.IMREAD_GRAYSCALE)
             
             if image is not None:
-                images.append(image) ; names.append(file.remove(".png"))
+                images.append(image) ; names.append(file)
             else:
                 print(f"Error al leer la imagen {file}") ; return None
     
