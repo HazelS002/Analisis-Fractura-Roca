@@ -1,6 +1,9 @@
 from matplotlib import pyplot as plt
 import numpy as np
 
+# layout de las imagene
+
+
 
 def show_images(images:list, titles:list[str], show:bool=True):
     """  """
@@ -17,18 +20,18 @@ def show_images(images:list, titles:list[str], show:bool=True):
 def show_stages(results:list[dict], show:bool=True):
     """  """
     stages = results[0].keys()
-    n_imgs, n_cols = len(results), len(stages)
+    n_images, n_stages = len(results), len(stages)
 
-    fig, axes = plt.subplots(n_imgs, n_cols)
-    if n_imgs == 1: axes = axes[np.newaxis, :]
+    fig, axes = plt.subplots(nrows=n_stages, ncols=n_images)
+    if n_images == 1: axes = axes[np.newaxis, :]
 
-    for i, res in enumerate(results):
-        for j, stage in enumerate(stages):
-            ax = axes[i, j]
-            img = res[stage]
+    for row, stage in enumerate(stages):
+        for col, result in enumerate(results):
+            ax = axes[row, col]
+            img = result[stage]
             ax.imshow(img, cmap="gray")
             ax.set_title(stage) ; ax.axis("off")
-            
+
     if show: plt.show()
     return fig, axes
 

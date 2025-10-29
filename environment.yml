@@ -1,0 +1,26 @@
+name: imagen-denoising
+channels:
+  - conda-forge
+  - pytorch
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy
+  # - pandas
+  - matplotlib
+  - seaborn
+  - scikit-image
+  - pillow
+  - scipy
+  - scikit-learn
+  - imageio
+  - pip
+  - pytorch
+  - keras
+  - torchvision
+  - opencv
+  - pip:
+    - opencv-python
+    - tensorflow==2.12.0
+    - denoiser
+    - pymupdf    # Para convertir PDFs a PNG

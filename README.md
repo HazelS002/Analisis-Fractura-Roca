@@ -1,9 +1,10 @@
 # Análisis de Fracturas en Rocas - Guanajuato Capital
 
 ## Descripción del Proyecto
-Este proyecto analiza los patrones subyacentes en los calcos de lozas del área
-de Guanajuato Capital mediante técnicas de procesamiento digital de imágenes y
-análisis computacional.
+En este proyecto se analiza los patrones subyacentes de lozas del área de
+Guanajuato Capital mediante técnicas de procesamiento digital de imágenes y
+análisis computacional sobre calcos de las lozas hechos por estudiantes de la
+Universidad de Guanajuato.
 
 ## Estructura del Proyecto
 
@@ -18,7 +19,7 @@ Analisis-Fractura-Roca/
 │   ├── processed/               # Datos procesados (imágenes)
 │   └── sample-images/           # Muestra inicial de imágenes
 ├── notebooks/                   # Análisis exploratorio
-├── reports/                     # Reportes y documentación
+├── report/                      # Reporte de resultados
 ├── tests/                       # Pruebas automatizadas
 ├── scripts/                     # Scripts de utilidad
 ```
@@ -31,18 +32,34 @@ Analisis-Fractura-Roca/
 git clone https://github.com/HazelS002/Analisis-Fractura-Roca.git
 cd Analisis-Fractura-Roca
 
-# Instalar dependencias
-pip install -r requirements.txt
+# Crear entorno de Conda
+conda env create -f environment.yml
 
-# Instalar el paquete en modo desarrollo
-pip install -e .
+# Activar entorno de Conda
+conda activate imagen-denoising
 ```
 
-### Dependencias principales
-- OpenCV: Procesamiento de imágenes
-- PyMuPDF: Conversión PDF a PNG
-- NumPy: Cálculos numéricos
-- Matplotlib: Visualización
+### Dependencias
+#### Dependencias principales
+- **OpenCV**: Procesamiento de imágenes y filtros de denoising
+- **scikit-image**: Algoritmos avanzados de eliminación de ruido
+- **PyTorch**: Redes neuronales para denoising profundo
+- **TensorFlow**: Alternativa para modelos de machine learning
+- **NumPy**: Cálculos numéricos y operaciones con arrays de imágenes
+- **Matplotlib**: Visualización de resultados antes/después
+- **Pillow**: Manipulación básica de formatos de imagen
+- **scipy**: Funciones matemáticas avanzadas para procesamiento
+
+#### Dependencias secundarias
+- **seaborn**: Estilos mejorados para visualización
+- **scikit-learn**: Utilidades de preprocesamiento y métricas
+- **imageio**: Lectura/escritura de múltiples formatos de imagen
+- **torchvision**: Modelos preentrenados y datasets para PyTorch
+
+#### Otras dependencias
+<!-- - **pandas**: Análisis de métricas de calidad (PSNR, SSIM) -->
+- **PyMuPDF**: Conversión de PDF a PNG (si se necesita procesar documentos)
+
 
 ## Uso del Proyecto
 
@@ -86,6 +103,9 @@ plot_comparison(original_img, processed_img, "Comparación")
 ```bash
 # Ejecutar análisis (desarrollándose)
 python src/analysis/fracture_analysis.py
+
+# o 
+python -m src.analysis.fracture_analysis
 ```
 
 **Funcionalidades en desarrollo:**
@@ -93,7 +113,7 @@ python src/analysis/fracture_analysis.py
 - Análisis de patrones geométricos
 - Clasificación de tipos de fractura
 
-## Flujo de Trabajo Recomendado
+<!-- ## Flujo de Trabajo Recomendado
 
 1. **Preparación de Datos**
    ```bash
@@ -113,38 +133,31 @@ python src/analysis/fracture_analysis.py
 4. **Análisis Específico**
    ```python
    from src.analysis import fracture_analysis
-   ```
+   ``` -->
 
 ## Estructura de Datos
 
 ### Formato de Entrada
 - **PDFs**: Documentos escaneados en `data/raw/pdfs/`
-- **Imágenes**: PNG/JPG en `data/processed/images/`
+- **Imágenes**: PNG en `data/raw/images/`
 
-### Formato de Salida
+<!-- ### Formato de Salida
 - Imágenes procesadas en `data/processed/`
 - Resultados de análisis en `reports/figures/`
-- Métricas y datos en `reports/`
+- Métricas y datos en `reports/` -->
 
 ## Desarrollo
 
 ### Agregar Nuevas Funcionalidades
 1. Crear módulo en `src/` correspondiente
-2. Agregar tests en `tests/`
-3. Actualizar `requirements.txt` si es necesario
-4. Documentar en `docs/`
-
-### Ejecutar Tests
-```bash
-python -m pytest tests/
-```
+2. Actualizar `environment.yml` si es necesario
 
 ### Estructurar Nuevos Módulos
 ```python
 # Ejemplo de estructura de módulo
 nuevo_modulo/
 ├── __init__.py
-├── main.py
+├── . . .
 └── helpers.py
 ```
 
@@ -160,12 +173,12 @@ nuevo_modulo/
 
 ### Actualizar Dependencias
 ```bash
-pip freeze > requirements.txt
+conda env update -f environment.yml --prune
 ```
 
-### Generar Documentación
+### Compilar Reporte
 ```bash
-# Generar reportes (futuro)
+# Generar reportes
 cd reports/
 pdflatex main.tex
 ```
@@ -173,12 +186,6 @@ pdflatex main.tex
 ## Troubleshooting
 
 ### Problemas Comunes
-
-**Error de importación:**
-```bash
-# Asegurarse de estar en directorio raíz
-pip install -e .
-```
 
 **PDFs no se convierten:**
 - Verificar que PyMuPDF esté instalado
@@ -188,7 +195,7 @@ pip install -e .
 - Verificar rutas en `src/utils/load_images.py`
 - Confirmar formato de archivos
 
-## Contacto y Soporte
+## Contacto
 
 - **Autor**: Hazel Shamed
 - **Repositorio**: [github.com/HazelS002/Analisis-Fractura-Roca](https://github.com/HazelS002/Analisis-Fractura-Roca)
