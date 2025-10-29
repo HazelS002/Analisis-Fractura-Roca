@@ -10,6 +10,9 @@ def read_images(dir):
             # Leer imagen en blanco y negro
             image = cv2.imread(os.path.join(dir, file), cv2.IMREAD_GRAYSCALE)
 
+            # redimencionar imagen
+            image = cv2.resize(image, (212, 272), interpolation=cv2.INTER_AREA)
+
             # normalizar imagen
             image = cv2.normalize(image, None, 0, 255, cv2.NORM_MINMAX)\
                 .astype(np.uint8)

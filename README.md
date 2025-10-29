@@ -66,7 +66,7 @@ conda activate imagen-denoising
 ### 1. Conversión de PDFs a Imágenes
 ```bash
 # Convertir todos los PDFs de data/raw/pdfs a PNG
-python scripts/convert_pdfs.py
+python scripts/convert_pdfs.py    # (especificar rutas en el script)
 ```
 
 **Parámetros configurables:**

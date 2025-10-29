@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 def clean_images(images):
     """Ejecuta todas las etapas sobre cada imagen"""
@@ -23,8 +24,5 @@ def clean_images(images):
 
     return results
 
-def get_stage_images(results, stage):
+def get_stage_images(results:list[dict], stage:str) -> list[np.ndarray]:
     return [result[stage] for result in results]
-
-# se probó pca, tresh adaptuvo con media, repitiendo clahe y denoising
-
