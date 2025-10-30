@@ -15,12 +15,10 @@ Analisis-Fractura-Roca/
 │   ├── denoising/               # Eliminación de ruido en imágenes
 │   └── utils/                   # Utilidades compartidas
 ├── data/                        # Gestión de datos
-│   ├── raw/                     # Datos originales (PDFs)
-│   ├── processed/               # Datos procesados (imágenes)
+│   ├── raw/                     # Datos originales
+│   ├── processed/               # Datos procesados
 │   └── sample-images/           # Muestra inicial de imágenes
-├── notebooks/                   # Análisis exploratorio
 ├── report/                      # Reporte de resultados
-├── tests/                       # Pruebas automatizadas
 ├── scripts/                     # Scripts de utilidad
 ```
 
@@ -47,14 +45,14 @@ conda activate imagen-denoising
 - **TensorFlow**: Alternativa para modelos de machine learning
 - **NumPy**: Cálculos numéricos y operaciones con arrays de imágenes
 - **Matplotlib**: Visualización de resultados antes/después
-- **Pillow**: Manipulación básica de formatos de imagen
+<!-- - **Pillow**: Manipulación básica de formatos de imagen -->
 - **scipy**: Funciones matemáticas avanzadas para procesamiento
 
 #### Dependencias secundarias
 - **seaborn**: Estilos mejorados para visualización
 - **scikit-learn**: Utilidades de preprocesamiento y métricas
 - **imageio**: Lectura/escritura de múltiples formatos de imagen
-- **torchvision**: Modelos preentrenados y datasets para PyTorch
+<!-- - **torchvision**: Modelos preentrenados y datasets para PyTorch -->
 
 #### Otras dependencias
 <!-- - **pandas**: Análisis de métricas de calidad (PSNR, SSIM) -->
@@ -63,7 +61,7 @@ conda activate imagen-denoising
 
 ## Uso del Proyecto
 
-### 1. Conversión de PDFs a Imágenes
+### Conversión de PDFs a Imágenes
 ```bash
 # Convertir todos los PDFs de data/raw/pdfs a PNG
 python scripts/convert_pdfs.py    # (especificar rutas en el script)
@@ -74,32 +72,7 @@ python scripts/convert_pdfs.py    # (especificar rutas en el script)
 - Formato de salida (PNG, JPG)
 - Carpeta de entrada/salida
 
-### 2. Eliminación de Ruido en Imágenes
-```bash
-# Ejecutar proceso de denoising en imágenes muestrales
-python src/denoising/main.py
-
-# O ejecutar como módulo
-python -m src.denoising.main
-```
-
-**Características:**
-- Aplica filtros de suavizado
-- Prepara imágenes para análisis
-
-### 3. Carga y Visualización de Imágenes
-```python
-from src.utils.load_images import read_images
-from src.utils.visualization import plot_comparison
-
-# Cargar imágenes
-images, names = read_images("data/sample-images")
-
-# Visualizar resultados
-plot_comparison(original_img, processed_img, "Comparación")
-```
-
-### 4. Análisis de Patrones de Fractura
+### Ejecución del código fuente en SRC
 ```bash
 # Ejecutar análisis (desarrollándose)
 python src/analysis/fracture_analysis.py
@@ -111,29 +84,8 @@ python -m src.analysis.fracture_analysis
 **Funcionalidades en desarrollo:**
 - Detección de bordes de fracturas
 - Análisis de patrones geométricos
-- Clasificación de tipos de fractura
+- Controlar rutas desde un sólo archivo
 
-<!-- ## Flujo de Trabajo Recomendado
-
-1. **Preparación de Datos**
-   ```bash
-   python scripts/convert_pdfs.py
-   ```
-
-2. **Preprocesamiento**
-   ```bash
-   python src/denoising/main.py
-   ```
-
-3. **Análisis Exploratorio**
-   ```bash
-   jupyter notebook notebooks/exploration.ipynb
-   ```
-
-4. **Análisis Específico**
-   ```python
-   from src.analysis import fracture_analysis
-   ``` -->
 
 ## Estructura de Datos
 

@@ -178,7 +178,7 @@ if __name__ == "__main__":
     from src.denoising import clean_images, get_stage_images
 
     print("Cargando imágenes...")
-    noisy_images, _ = read_images("./data/sample-images/")
+    noisy_images, _ = read_images("./data/sample-images/images/")
     results = clean_images(noisy_images)
     noisy_images = get_stage_images(results, "thresh")
     
