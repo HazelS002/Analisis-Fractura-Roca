@@ -1,6 +1,8 @@
 
+# escribir paths
 
-# paths
+DATA_DIR = "./data/"
+SAMPLE_DATA_DIR = "./data/sample-images/"
+RAW_DATA_DIR = "./data/raw/"
 
-DATA_PATH = "./data/"
-SAMPLE_DATA_PATH = "./data/sample-images/"
+MODELS_DIR = "./models/"
