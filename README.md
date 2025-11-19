@@ -11,9 +11,6 @@ Universidad de Guanajuato.
 ```
 Analisis-Fractura-Roca/
 ├── src/                          # Código fuente principal
-│   ├── analysis/                # Análisis de patrones de fractura
-│   ├── denoising/               # Eliminación de ruido en imágenes
-│   └── utils/                   # Utilidades compartidas
 ├── data/                        # Gestión de datos
 │   ├── raw/                     # Datos originales
 │   ├── processed/               # Datos procesados
@@ -74,11 +71,8 @@ python scripts/convert_pdfs.py    # (especificar rutas en el script)
 
 ### Ejecución del código fuente en SRC
 ```bash
-# Ejecutar análisis (desarrollándose)
-python src/analysis/fracture_analysis.py
-
-# o 
-python -m src.analysis.fracture_analysis
+# Ejecutar 
+python -m src.<file-name>
 ```
 
 **Funcionalidades en desarrollo:**
