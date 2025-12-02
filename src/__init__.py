@@ -5,11 +5,11 @@ plt.rcParams['figure.constrained_layout.use'] = True
 
 # paths
 DATA_DIR = "./data/"
-SAMPLE_DATA_DIR = "./data/sample-images/"
-RAW_DATA_DIR = "./data/raw/"
+SAMPLE_DATA_DIR = DATA_DIR + "sample-images/"
+RAW_DATA_DIR = DATA_DIR + "raw/"
+PROCESSED_DATA_DIR = DATA_DIR + "processed/"
 
 MODELS_DIR = "./models/"
 
-
 # tamaño de las imagenes
-IMAGE_SIZE = (212, 272)
+IMAGE_SIZE = (358, 232)  # (width, height)

@@ -3,6 +3,7 @@ import numpy as np
 
 
 def show_images(images:list, names:list[str], show:bool=True):
+    """ Muestra una lista de imagenes. """
     n_images = len(images)
     
     n_cols = np.ceil(np.sqrt(n_images)).astype(int)
@@ -43,5 +44,4 @@ def show_stages(results:list[dict], show:bool=True):
     return fig, axes
 
 
-if __name__ == "__main__":
-    pass
+if __name__ == "__main__": pass
