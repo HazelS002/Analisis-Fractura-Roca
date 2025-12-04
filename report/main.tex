@@ -26,7 +26,7 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
-% \usepackage[
+%\usepackage[
 %  backend=biber,
 %  style=alphabetic,
 %  citestyle=alphabetic,
@@ -35,9 +35,9 @@
 %  isbn=false,
 %  eprint=false,
 %  maxbibnames=99
-% ]{biblatex}
+%]{biblatex}
 
-% \addbibresource{references.bib}
+%\addbibresource{references.bib}
 
 % Definimos colores estilo "terminal con fondo negro"
 \definecolor{backcolour}{rgb}{0.1,0.1,0.1}
@@ -120,6 +120,80 @@
 
     \section{Introducción}
 
+    \section{Planteamiento de hipótesis}
 
+    Las ecuaciones fundamentales que describen ondas generadas por un impacto fuerte y rápido en una roca y por qué producen patrones elípticos o circulares. Las divido en niveles: desde la ecuación base hasta los modelos específicos usados en geología y mecánica de fracturas.
+    
+    \subsection{Ecuación de onda elastodinámica}
+    
+    Un impacto fuerte sobre una roca genera \textbf{ondas sísmicas} que se propagan como deformaciones en el medio sólido. La ecuación general que describe esto es la \textbf{ecuación de Navier–Cauchy}:
+    
+    \[ \rho \frac{\partial^2 \mathbf{u}}{\partial t^2}
+    =(\lambda+\mu)\nabla(\nabla\cdot \mathbf{u})+\mu\nabla^2\mathbf{u} + \mathbf{F} \]
+    %Este conjunto de ecuaciones se deriva teniendo en cuenta las tracciones a través de las superficies de un elemento de volumen, que corresponden a las componentes del tensor de tensión y las fuerzas del cuerpo que son proporcionales a la masa en el elemento de volumen. Las ecuaciones de movimiento se obtienen sumando todas las fuerzas y términos de inercia para cada componente de desplazamiento:
+    
+    Donde,
+    \[ \mathbf{u}(x,y,z,t)=\begin{pmatrix}
+        u_x(x,y,z,t)\\
+        u_y(x,y,z,t)\\
+        u_z(x,y,z,t)\\
+    \end{pmatrix} \]
+    es el campo de desplazamientos; $\rho$, densidad de la roca; $\lambda$ y $\mu$, constantes de Lamé (rigidez); y $\mathbf{F}$ la fuerza impulsiva del impacto.
+    
+    
+    Esta ecuación genera dos ondas:
+    \begin{itemize}
+        \item \textbf{Ondas P:} compresionales, rápidas
+        \item \textbf{Ondas S:} cortantes, más lentas
+    \end{itemize}
+    
+    Si el impacto es puntual, la solución en 2D se vuelve casi circular; si el cuerpo tiene anisotropía o estratos, aparecen patrones elípticos.
 
+    \subsubsection{Ecuación de onda para un impacto impulsivo}
+    
+    Sea $\delta$ la delta de Dirac y $F_0$ la fuerza del impacto fuerte. Este impacto se modela como una fuerza de la forma
+    \[ \mathbf{F}(r,t)=F_0\delta(r)\delta(t). \]
+    Es decir, concentrada en un punto ($\delta(r)$) y muy breve en el tiempo ($\delta(t)$).
+    
+    Por lo tanto, podemos escribir la ecuación de Navier-Cauchy como
+    \[ \rho~\frac{\partial^2 u}{\partial t^2} = c^2 \nabla^2 u + F_0 \delta(r)\delta(t) \]
+    donde ($c$) es la velocidad de onda en la roca.
+    
+    \subsection{Solución aproximada: ondas concéntricas}
+    
+    En un medio elástico e isótropo la solución del impacto es
+    \[ u(r,t) \approx \frac{F_0}{2\pi \rho c^2 r}~ H\left(t-\frac{r}{c}\right) \]
+    donde $r = \sqrt{x^2+y^2}$ y $H$ es la función escalón.
+    
+    Esto significa que las ondas se propagan formando círculos concéntricos.
+
+    \subsection{Por qué aparecen patrones elípticos en rocas}
+    
+    Si la roca no es isotrópica (muy común en lozas), las ondas no viajan igual en todas las direcciones.
+    
+    Esto se modela usando velocidades diferentes según dirección ($c_x \neq c_y$)
+    
+    Entonces la ecuación es:
+    \[ \rho \frac{\partial^2 u}{\partial t^2} = c_x^2 \frac{\partial^2 u}{\partial x^2} + c_y^2 \frac{\partial^2 u}{\partial y^2} \]
+    
+    La solución ya no forma círculos sino elipses
+    \[ \frac{x^2}{(c_x t)^2} + \frac{y^2}{(c_y t)^2} = 1 \]
+    Esto podría explicar por qué aparecen patrones elípticos en las lozas (la onda se propaga más rápido en un eje que en otro).
+    
+    \subsection{Fracturas generadas por impacto (modelos de grietas)}
+    
+    Si el impacto excede la resistencia de la roca, se generan fracturas.
+    La ecuación que gobierna la apertura de una grieta está dada por \textbf{Ley de Griffith} (inicio de fractura:
+    \[ \sigma_c = \sqrt{\frac{2 E \gamma}{\pi a}} \]
+    donde $E$ es el módulo de Young, $\gamma$ la energía superficial y $a$ la longitud inicial de defecto.
+    
+    Si el impacto genera una onda con $\sigma_{\text{onda}} > \sigma_c$ entonces aparece una grieta
+    
+    \subsection{Forma de la grieta por impacto}
+    
+    Si el impacto es perpendicular
+    \[ \text{Grietas radiales + círculos concéntricos (conos Hertzianos)} \]
+    Si hay anisotropía:
+    \[ \text{Elipses concéntricas + fracturas en forma de abanico} \]
+    Esto coincide con muchos patrones en rocas y lozas.
 \end{document}
