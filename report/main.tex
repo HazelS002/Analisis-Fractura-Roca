@@ -80,7 +80,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\setlength{\parindent}{1em}
+\setlength{\parindent}{0em}
 \setlength{\parskip}{1em}
 
 
@@ -122,78 +122,467 @@
 
     \section{Planteamiento de hipótesis}
 
-    Las ecuaciones fundamentales que describen ondas generadas por un impacto fuerte y rápido en una roca y por qué producen patrones elípticos o circulares. Las divido en niveles: desde la ecuación base hasta los modelos específicos usados en geología y mecánica de fracturas.
+    Las ecuaciones fundamentales que describen ondas generadas por un impacto fuerte y rápido en una roca y por qué producen patrones elípticos o circulares. 
     
     \subsection{Ecuación de onda elastodinámica}
     
-    Un impacto fuerte sobre una roca genera \textbf{ondas sísmicas} que se propagan como deformaciones en el medio sólido. La ecuación general que describe esto es la \textbf{ecuación de Navier–Cauchy}:
+    Un impacto fuerte sobre una roca genera ondas que se propagan como deformaciones en un medio sólido. La ecuación general que describe esto es la \textbf{ecuación de Navier–Cauchy}:
     
     \[ \rho \frac{\partial^2 \mathbf{u}}{\partial t^2}
-    =(\lambda+\mu)\nabla(\nabla\cdot \mathbf{u})+\mu\nabla^2\mathbf{u} + \mathbf{F} \]
-    %Este conjunto de ecuaciones se deriva teniendo en cuenta las tracciones a través de las superficies de un elemento de volumen, que corresponden a las componentes del tensor de tensión y las fuerzas del cuerpo que son proporcionales a la masa en el elemento de volumen. Las ecuaciones de movimiento se obtienen sumando todas las fuerzas y términos de inercia para cada componente de desplazamiento:
+    =(\lambda+\mu)\nabla(\nabla\cdot \mathbf{u})+\mu\nabla^2\mathbf{u} + \mathbf{F}, \]
     
-    Donde,
-    \[ \mathbf{u}(x,y,z,t)=\begin{pmatrix}
-        u_x(x,y,z,t)\\
-        u_y(x,y,z,t)\\
-        u_z(x,y,z,t)\\
+    donde,
+    \[ \mathbf{u}(x_1,x_2,x_3,t)=\begin{pmatrix}
+        u_1(x_1,x_2,x_3,t)\\
+        u_2(x_1,x_2,x_3,t)\\
+        u_3(x_1,x_2,x_3,t)\\
     \end{pmatrix} \]
     es el campo de desplazamientos; $\rho$, densidad de la roca; $\lambda$ y $\mu$, constantes de Lamé (rigidez); y $\mathbf{F}$ la fuerza impulsiva del impacto.
-    
-    
-    Esta ecuación genera dos ondas:
+
+    La ecuación anterior describe la dinámica de un medio elástico, lineal, isótropo y homogéneo. Esta se deduce combinando la \textit{Ley de Hooke generalizada para medios isótropos} y \textit{Ecuación de movimiento (Ley de Newton)}
+
     \begin{itemize}
-        \item \textbf{Ondas P:} compresionales, rápidas
-        \item \textbf{Ondas S:} cortantes, más lentas
+        \item \textbf{\textit{Ley de Hooke generalizada para medios isótropos:}} Para un material elástico lineal isótropo, el tensor de tensiones \(\sigma_{ij}\) se relaciona con el tensor de deformaciones infinitesimales \(\epsilon_{ij}\) mediante los coeficientes de Lamé \(\lambda\) y \(\mu\) de la siguiente manera
+        \[ \sigma_{ij} = \lambda \delta_{ij} \epsilon_{kk} + 2\mu \epsilon_{ij}, \]
+        donde
+        \[\epsilon_{ij} = \frac{1}{2} \left( \frac{\partial u_i}{\partial x_j} + \frac{\partial u_j}{\partial x_i} \right)\]
+        es el tensor de deformación, \(\epsilon_{kk} = \nabla \cdot \mathbf{u}\) es la traza del tensor de deformación) y \(\delta_{ij}\) es la delta de Kronecker.
+
+        \item \textbf{\textit{Ecuación de movimiento (Ley de Newton):}} Para un elemento de volumen, la segunda ley de Newton en forma diferencial (ecuación de Cauchy) es
+        \[ \rho \frac{\partial^2 u_i}{\partial t^2} = \frac{\partial \sigma_{ij}}{\partial x_j} + F_i \]
+        donde \(F_i\) son las componentes de la fuerza de cuerpo por unidad de volumen. En notación vectorial
+        \[ \rho \ddot{\mathbf{u}} = \nabla \cdot \boldsymbol{\sigma} + \mathbf{F} \]
+        
     \end{itemize}
     
-    Si el impacto es puntual, la solución en 2D se vuelve casi circular; si el cuerpo tiene anisotropía o estratos, aparecen patrones elípticos.
+    
+    Ahora, calculamos la divergencia del tensor de tensiones
+    \[ \frac{\partial \sigma_{ij}}{\partial x_j} = \lambda \frac{\partial}{\partial x_j}(\delta_{ij} \epsilon_{kk}) + 2\mu \frac{\partial \epsilon_{ij}}{\partial x_j} \]
+    
+    Desarrollando tenemos
+    \[\lambda \frac{\partial}{\partial x_j}(\delta_{ij} \epsilon_{kk}) = \lambda \frac{\partial \epsilon_{kk}}{\partial x_i} = \lambda \frac{\partial}{\partial x_i}(\nabla \cdot \mathbf{u})\quad\text{y}\quad 2\mu \frac{\partial \epsilon_{ij}}{\partial x_j} = \mu \left( \nabla^2 u_i + \frac{\partial}{\partial x_i}(\nabla \cdot \mathbf{u}) \right).\]
+    Entonces,
+    \[ \frac{\partial \sigma_{ij}}{\partial x_j} = (\lambda + \mu) \frac{\partial}{\partial x_i}(\nabla \cdot \mathbf{u}) + \mu \nabla^2 u_i \]
+    y en notación vectorial
+    \[ \nabla \cdot \boldsymbol{\sigma} = (\lambda + \mu) \nabla (\nabla \cdot \mathbf{u}) + \mu \nabla^2 \mathbf{u} \]
+    Por lo tanto,
+    \[ \rho \frac{\partial^2 \mathbf{u}}{\partial t^2} = (\lambda + \mu) \nabla (\nabla \cdot \mathbf{u}) + \mu \nabla^2 \mathbf{u} + \mathbf{F} \]
+    
+    Podemos interpretar a \(\rho \frac{\partial^2 \mathbf{u}}{\partial t^2}\) como la fuerza de inercia por unidad de volumen; a \((\lambda + \mu) \nabla (\nabla \cdot \mathbf{u})\) como la fuerza elástica debida a compresiones/dilataciones;
+    % \(\nabla \cdot \mathbf{u}\) mide el cambio de volumen local (dilatación); \(\lambda\) y \(\mu\) son los coeficientes de Lamé, que cuantifican la resistencia del material a la compresión y al corte;
+    \(\mu \nabla^2 \mathbf{u}\) es la fuerza elástica debida a deformaciones de corte;
+    % \(\nabla^2 \mathbf{u}\) está relacionado con la curvatura del campo de desplazamientos;
+    y \(\mathbf{F}\) son fuerzas externas por unidad de volumen (gravedad, fuerzas sísmicas, etc.).
+    
+    Por otro lado, si \(\mathbf{F} = 0\) y se busca soluciones de onda, se obtienen dos modos independientes:
+    \begin{itemize}
+        \item Ondas P (Primarias/Compresionales):
+        \[ \nabla \times \mathbf{u} = 0 \quad \Rightarrow \quad \rho \ddot{\mathbf{u}} = (\lambda + 2\mu) \nabla (\nabla \cdot \mathbf{u}) \]
+        Velocidad: \(c_p = \sqrt{\frac{\lambda + 2\mu}{\rho}}\).  
+        Estas ondas son longitudinales (vibración en la dirección de propagación).
+
+        \item Ondas S (Secundarias/Cortantes):
+        \[ \nabla \cdot \mathbf{u} = 0 \quad \Rightarrow \quad \rho \ddot{\mathbf{u}} = \mu \nabla^2 \mathbf{u} \]
+        Velocidad: \(c_s = \sqrt{\frac{\mu}{\rho}}\).  
+        Estas ondas son transversales (vibración perpendicular a la dirección de propagación).
+    \end{itemize}
+
+    La Ecuación de Navier-Cauchy es fundamental en la mecánica de sólidos elásticos, describiendo cómo se mueven y deforman bajo fuerzas, relacionando desplazamiento, densidad y tensión, siendo clave para la elastodinámica (movimiento) y la elastostática (equilibrio) de materiales. Es un conjunto de ecuaciones diferenciales parciales que, en su forma general para sólidos elásticos, vinculan el desplazamiento con las fuerzas y la geometría del material, utilizando módulos de elasticidad como los de Lamé, y sirve como base para entender la propagación de ondas elásticas. 
+
+    La ecuación combina la \textit{ley de Newton (inercia)} con la \textit{ley de Hooke (elasticidad)} en un medio continuo. Los términos elásticos representan dos mecanismos de restauración: uno por cambio de volumen (\(\nabla (\nabla \cdot \mathbf{u})\)) y otro por distorsión de forma (\(\nabla^2 \mathbf{u}\)). Esto explica por qué en sólidos existen dos tipos de ondas (P y S) con velocidades diferentes, mientras que en fluidos (donde \(\mu = 0\)) solo existen ondas P.
 
     \subsubsection{Ecuación de onda para un impacto impulsivo}
-    
-    Sea $\delta$ la delta de Dirac y $F_0$ la fuerza del impacto fuerte. Este impacto se modela como una fuerza de la forma
-    \[ \mathbf{F}(r,t)=F_0\delta(r)\delta(t). \]
-    Es decir, concentrada en un punto ($\delta(r)$) y muy breve en el tiempo ($\delta(t)$).
-    
-    Por lo tanto, podemos escribir la ecuación de Navier-Cauchy como
-    \[ \rho~\frac{\partial^2 u}{\partial t^2} = c^2 \nabla^2 u + F_0 \delta(r)\delta(t) \]
-    donde ($c$) es la velocidad de onda en la roca.
-    
-    \subsection{Solución aproximada: ondas concéntricas}
-    
-    En un medio elástico e isótropo la solución del impacto es
-    \[ u(r,t) \approx \frac{F_0}{2\pi \rho c^2 r}~ H\left(t-\frac{r}{c}\right) \]
-    donde $r = \sqrt{x^2+y^2}$ y $H$ es la función escalón.
-    
-    Esto significa que las ondas se propagan formando círculos concéntricos.
 
-    \subsection{Por qué aparecen patrones elípticos en rocas}
+    Por simplicidad consideremos que un impacto se da en punto $\mathbf{0}$ (el origen) en el instante $t=0$, para cada punto $\mathbf{x}=(x_1, x_2, x_3)^{T}$ consideremos $r_\mathbf{x}:=\|\mathbf{x}\|$. Sea $\delta$ la delta de Dirac y $\mathbf{F_0}$ la fuerza del impacto fuerte. La fuerza del impacto por unidad de volumen se modela de la forma
+    \[ \mathbf{F}(r_\mathbf{x},t)=\mathbf{F_0}\delta(r_\mathbf{x})\delta(t). \]
+    Es decir, la fuerza $\mathbf{F_0}$ concentrada en un punto ($\delta(r)$) y muy breve en el tiempo ($\delta(t)$). Podemos escribir la ecuación de Navier-Cauchy como
+    \[ \rho \frac{\partial^2 \mathbf{u}}{\partial t^2} = (\lambda+\mu)\nabla(\nabla\cdot \mathbf{u}) + \mu\nabla^2\mathbf{u} + \mathbf{F_0}\delta(r_\mathbf{x})\delta(t) \]
+
+
+    \subsection{Solución fundamental para un medio infinito}
     
-    Si la roca no es isotrópica (muy común en lozas), las ondas no viajan igual en todas las direcciones.
+    Para resolver este problema, es conveniente introducir el concepto de \textit{función de Green dinámica} para el operador de Navier-Cauchy.
     
-    Esto se modela usando velocidades diferentes según dirección ($c_x \neq c_y$)
+    Buscamos una solución fundamental \(\mathbf{G}(\mathbf{x}, t)\) que sea un tensor de segundo orden (3×3), que represente el desplazamiento en la dirección \(i\) debido a una fuerza puntual unitaria aplicada en la dirección \(j\). Matemáticamente, \(\mathbf{G}(\mathbf{x}, t)\) satisface
+    \[ \rho \frac{\partial^2 G_{ij}(\mathbf{x}, t)}{\partial t^2} = (\lambda+\mu)\frac{\partial}{\partial x_i}(\nabla\cdot \mathbf{G}_j) + \mu\nabla^2 G_{ij}(\mathbf{x}, t) + \delta_{ij}\delta(\mathbf{x})\delta(t), \]
+    donde \(\mathbf{G}_j\) es la \(j\)-ésima columna de \(\mathbf{G}\), o equivalentemente en notación vectorial:
+    \[ \rho \frac{\partial^2 \mathbf{G}}{\partial t^2} = (\lambda+\mu)\nabla(\nabla\cdot \mathbf{G}) + \mu\nabla^2\mathbf{G} + \mathbf{I} \delta(\mathbf{x})\delta(t), \]
+    con condiciones iniciales de reposo
+    \[ \mathbf{G}(\mathbf{x}, 0) = \mathbf{0} \quad\text{y}\quad \frac{\partial \mathbf{G}}{\partial t}(\mathbf{x}, 0) = \mathbf{0}. \]
     
-    Entonces la ecuación es:
-    \[ \rho \frac{\partial^2 u}{\partial t^2} = c_x^2 \frac{\partial^2 u}{\partial x^2} + c_y^2 \frac{\partial^2 u}{\partial y^2} \]
+    Una vez encontrada \(\mathbf{G}\), la solución para nuestro impacto con fuerza \(\mathbf{F}_0\) es simplemente:
+    \[ \mathbf{u}(\mathbf{x}, t) = \mathbf{G}(\mathbf{x}, t) \cdot \mathbf{F}_0 = \int_{-\infty}^{\infty} \mathbf{G}(\mathbf{x}-\mathbf{x}', t-t') \cdot \mathbf{F}_0 \delta(\mathbf{x}')\delta(t') \, d\mathbf{x}' dt'. \]
     
-    La solución ya no forma círculos sino elipses
-    \[ \frac{x^2}{(c_x t)^2} + \frac{y^2}{(c_y t)^2} = 1 \]
-    Esto podría explicar por qué aparecen patrones elípticos en las lozas (la onda se propaga más rápido en un eje que en otro).
+    Aplicando la transformada de Fourier espacial \(\hat{\mathbf{G}}(\mathbf{k}, t) = \int_{\mathbb{R}^3} \mathbf{G}(\mathbf{x}, t) e^{-i\mathbf{k}\cdot\mathbf{x}} d\mathbf{x}\), la ecuación se convierte en una ecuación diferencial ordinaria en el tiempo para cada modo \(\mathbf{k}\).
     
-    \subsection{Fracturas generadas por impacto (modelos de grietas)}
+    Más directamente, se proyecta \(\hat{\mathbf{G}}\) en componentes longitudinal (\(P\)) y transversal (\(S\)):
+    \[ \hat{\mathbf{G}} = \hat{\mathbf{G}}_P + \hat{\mathbf{G}}_S, \quad \text{donde } \mathbf{k} \times \hat{\mathbf{G}}_P = \mathbf{0} \text{ y } \mathbf{k} \cdot \hat{\mathbf{G}}_S = 0. \]
     
-    Si el impacto excede la resistencia de la roca, se generan fracturas.
-    La ecuación que gobierna la apertura de una grieta está dada por \textbf{Ley de Griffith} (inicio de fractura:
-    \[ \sigma_c = \sqrt{\frac{2 E \gamma}{\pi a}} \]
-    donde $E$ es el módulo de Young, $\gamma$ la energía superficial y $a$ la longitud inicial de defecto.
+    Esto lleva a dos ecuaciones desacopladas:
+    \[
+    \rho \frac{\partial^2 \hat{\mathbf{G}}_P}{\partial t^2} = -(\lambda+2\mu) k^2 \hat{\mathbf{G}}_P + \frac{\mathbf{k}\mathbf{k}}{k^2} \delta(t)\quad\text{y}\quad
+    \rho \frac{\partial^2 \hat{\mathbf{G}}_S}{\partial t^2} = -\mu k^2 \hat{\mathbf{G}}_S + \left(\mathbf{I} - \frac{\mathbf{k}\mathbf{k}}{k^2}\right) \delta(t),
+    \]
+    donde \(k = |\mathbf{k}|\), y \(\frac{\mathbf{k}\mathbf{k}}{k^2}\) es el proyector en la dirección de \(\mathbf{k}\).
     
-    Si el impacto genera una onda con $\sigma_{\text{onda}} > \sigma_c$ entonces aparece una grieta
+    Resolviendo las EDOs anteriores (osciladores armónicos forzados por un delta) y antitransformando, se obtiene la famosa \textit{solución de Stokes} para la función de Green en un medio infinito, homogéneo e isótropo
+    \[ \mathbf{G}(\mathbf{x}, t) = \frac{1}{4\pi\rho} \left\{ \frac{1}{c_p^2 r} \hat{\mathbf{x}}\hat{\mathbf{x}} \ \delta\left(t - \frac{r}{c_p}\right) + \frac{1}{c_s^2 r} (\mathbf{I} - \hat{\mathbf{x}}\hat{\mathbf{x}}) \ \delta\left(t - \frac{r}{c_s}\right) + \frac{1}{r^3} \mathbf{H}\left(t - \frac{r}{c_p}, t - \frac{r}{c_s}\right) \right\} H(t), \]
     
-    \subsection{Forma de la grieta por impacto}
+    donde:
+    \begin{itemize}
+        \item \(r = |\mathbf{x}|\), \(\hat{\mathbf{x}} = \mathbf{x}/r\) es el vector unitario radial.
+        \item \(\hat{\mathbf{x}}\hat{\mathbf{x}}\) es el diádico o producto tensorial (una matriz 3×3 con componentes \(\hat{x}_i \hat{x}_j\)).
+        \item \(H(t)\) es la función escalón de Heaviside, que garantiza causalidad (no hay señal antes del impacto en \(t=0\)).
+        \item El tensor \(\mathbf{I} - \hat{\mathbf{x}}\hat{\mathbf{x}}\) es el proyector en el plano perpendicular a \(\hat{\mathbf{x}}\).
+        \item La función tensorial \(\mathbf{H}\) representa los \textit{términos de campo cercano} (\textit{near-field}), que no son impulsivos (como las deltas) sino que tienen una duración finita \((\frac{r}{c_s} - \frac{r}{c_p})\) y decaen como \(1/r^3\). Su expresión explícita es
+        \[ \mathbf{H}(\tau_p, \tau_s) = \left[ 3\hat{\mathbf{x}}\hat{\mathbf{x}} - \mathbf{I} \right] \int_{\tau_s}^{\tau_p} \tau \delta(t-\tau) d\tau = \left(3\hat{\mathbf{x}}\hat{\mathbf{x}} - \mathbf{I}\right) \left[ t \left( H(t-\tau_s) - H(t-\tau_p) \right) \right]_{\text{evaluado para } \tau_p=r/c_p, \tau_s=r/c_s}. \]
+        En la práctica, \(\mathbf{H}\) aporta una señal transitoria que ocurre entre la llegada de las ondas P y S.
+    \end{itemize}
+    Por lo tanto, dada la fuerza impulsiva \(\mathbf{F}(\mathbf{x},t) = \mathbf{F}_0 \delta(\mathbf{x})\delta(t)\) y la función de Green \(\mathbf{G}(\mathbf{x}, t)\) derivada anteriormente, la solución explícita para el campo de desplazamientos es
+    \[ \boxed{
+    \mathbf{u}(\mathbf{x}, t) = \mathbf{G}(\mathbf{x}, t) \cdot \mathbf{F}_0 = \frac{H(t)}{4\pi\rho} \left[ \frac{\hat{\mathbf{x}}\hat{\mathbf{x}} \cdot \mathbf{F}_0}{c_p^2 r} \ \delta\left(t - \frac{r}{c_p}\right) + \frac{(\mathbf{I} - \hat{\mathbf{x}}\hat{\mathbf{x}}) \cdot \mathbf{F}_0}{c_s^2 r} \ \delta\left(t - \frac{r}{c_s}\right) + \frac{1}{r^3} \mathbf{H}\left(t - \frac{r}{c_p}, t - \frac{r}{c_s}\right) \cdot \mathbf{F}_0 \right]} \]
+
+    Durante las simulaciones se observo un comportamiento circular que no encaja con nuestros patrones obtenidos en rocas.
+
+    \subsection{Solución con condiciones iniciales y de frontera}u 
+
+    Nuestros calcos son los siguientes
+
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=0.5\linewidth]{figures/Calcos.png}
+        \caption{Enter Caption}
+        \label{fig:placeholder}
+    \end{figure}
+
+    Queremos ver si a través de considerar condiciones frontera (ya que las lozas son rectangulares) los patrones obtenidos se comportan siguiendo esta ecuación.
     
-    Si el impacto es perpendicular
-    \[ \text{Grietas radiales + círculos concéntricos (conos Hertzianos)} \]
-    Si hay anisotropía:
-    \[ \text{Elipses concéntricas + fracturas en forma de abanico} \]
-    Esto coincide con muchos patrones en rocas y lozas.
+    Consideremos una losa rectangular de dimensiones \(L_x \times L_y \times L_z\), con un impacto en la posición \(\mathbf{x}_0 = (x_0, y_0, z_0)^T\). La ecuación gobernante es
+    \[ \rho \frac{\partial^2 \mathbf{u}}{\partial t^2} = (\lambda + \mu)\nabla(\nabla\cdot \mathbf{u}) + \mu\nabla^2\mathbf{u} + \mathbf{F}_0\delta(\mathbf{x} - \mathbf{x}_0)\delta(t) \]
+    con condiciones iniciales
+    \[ \mathbf{u}(\mathbf{x}, 0) = \mathbf{0}, \quad \frac{\partial \mathbf{u}}{\partial t}(\mathbf{x}, 0) = \mathbf{0} \]
+    y condiciones de frontera en las seis caras del dominio.
+    
+    % ## **2. Tipos de Condiciones de Frontera**
+    
+    % Para sólidos elásticos, las condiciones de frontera más comunes son:
+    
+    % ### **2.1 Frontera Fija (Dirichlet)**
+    % \[
+    % \mathbf{u}(\mathbf{x}, t) = \mathbf{0} \quad \text{para } \mathbf{x} \in \partial\Omega_{\text{fijo}}
+    % \]
+    
+    % ### **2.2 Frontera Libre (Neumann)**
+    % \[
+    % \boldsymbol{\sigma}(\mathbf{x}, t)\cdot\mathbf{n} = \mathbf{0} \quad \text{para } \mathbf{x} \in \partial\Omega_{\text{libre}}
+    % \]
+    % donde \(\boldsymbol{\sigma}\) es el tensor de tensiones y \(\mathbf{n}\) la normal exterior.
+    
+    % ### **2.3 Frontera Periódica**
+    % \[
+    % \mathbf{u}(x+L_x, y, z, t) = \mathbf{u}(x, y, z, t) \quad \text{(análogo para y y z)}
+    % \]
+    
+    % Para una losa empotrada en su base y libre en los lados laterales, tendríamos condiciones mixtas.
+    
+    % ## **3. Método de Separación de Variables**
+    
+    % Buscamos soluciones de la forma:
+    
+    % \[
+    % \mathbf{u}(\mathbf{x}, t) = \sum_{\mathbf{k}, \alpha} \mathbf{U}_{\mathbf{k}}^{\alpha}(\mathbf{x}) T_{\mathbf{k}}^{\alpha}(t)
+    % \]
+    
+    % donde \(\mathbf{k} = (k_x, k_y, k_z)\) es el vector de números de onda y \(\alpha = P, S\) denota el tipo de onda.
+    
+    % ### **3.1 Modos Normales para Fronteras Fijas**
+    
+    % Para condiciones de Dirichlet en todas las caras, los modos espaciales son:
+    
+    % \[
+    % \mathbf{U}_{\mathbf{k}}(\mathbf{x}) = \mathbf{A}_{\mathbf{k}} \sin\left(\frac{m\pi x}{L_x}\right) \sin\left(\frac{n\pi y}{L_y}\right) \sin\left(\frac{p\pi z}{L_z}\right)
+    % \]
+    
+    % con \(m, n, p \in \mathbb{N}^+\) y \(k_x = \frac{m\pi}{L_x}\), \(k_y = \frac{n\pi}{L_y}\), \(k_z = \frac{p\pi}{L_z}\).
+    
+    % ### **3.2 Modos Normales para Fronteras Libres**
+    
+    % Para condiciones de Neumann, los modos son cosenos:
+    
+    % \[
+    % \mathbf{U}_{\mathbf{k}}(\mathbf{x}) = \mathbf{B}_{\mathbf{k}} \cos\left(\frac{m\pi x}{L_x}\right) \cos\left(\frac{n\pi y}{L_y}\right) \cos\left(\frac{p\pi z}{L_z}\right)
+    % \]
+    
+    % ### **3.3 Ecuación Temporal**
+    
+    % Sustituyendo en la ecuación de Navier-Cauchy sin fuentes:
+    
+    % \[
+    % \rho \frac{d^2 T_{\mathbf{k}}^{\alpha}}{dt^2} + \rho (\omega_{\mathbf{k}}^{\alpha})^2 T_{\mathbf{k}}^{\alpha} = 0
+    % \]
+    
+    % con frecuencias naturales:
+    
+    % \[
+    % \omega_{\mathbf{k}}^{P} = c_p |\mathbf{k}|, \quad \omega_{\mathbf{k}}^{S} = c_s |\mathbf{k}|
+    % \]
+    
+    % ## **4. Solución mediante la Función de Green Modal**
+    
+    % La solución completa para la fuerza impulsiva se escribe como:
+    
+    % \[
+    % \mathbf{u}(\mathbf{x}, t) = \sum_{\mathbf{k}, \alpha} \frac{\mathbf{U}_{\mathbf{k}}^{\alpha}(\mathbf{x}) \left[\mathbf{U}_{\mathbf{k}}^{\alpha}(\mathbf{x}_0)\cdot\mathbf{F}_0\right]}{\rho \|\mathbf{U}_{\mathbf{k}}^{\alpha}\|^2} \frac{\sin(\omega_{\mathbf{k}}^{\alpha} t)}{\omega_{\mathbf{k}}^{\alpha}} H(t)
+    % \]
+    
+    % donde \(\|\mathbf{U}_{\mathbf{k}}^{\alpha}\|^2 = \int_{\Omega} |\mathbf{U}_{\mathbf{k}}^{\alpha}(\mathbf{x})|^2 d\mathbf{x}\) es la norma del modo.
+    
+    % ### **4.1 Caso Específico: Losa Delgada (Placa)**
+    
+    % Para una placa delgada (\(L_z \ll L_x, L_y\)), podemos usar la aproximación de placa de Kirchhoff-Love. En este caso, la ecuación se simplifica a:
+    
+    % \[
+    % D\nabla^4 w + \rho h \frac{\partial^2 w}{\partial t^2} = F_z \delta(x-x_0)\delta(y-y_0)\delta(t)
+    % \]
+    
+    % donde:
+    % - \(w(x,y,t)\) es la deflexión vertical
+    % - \(D = \frac{Eh^3}{12(1-\nu^2)}\) es la rigidez flexional
+    % - \(h\) es el espesor de la placa
+    
+    % La solución para condiciones de borde simplemente apoyadas es:
+    
+    % \[
+    % w(x,y,t) = \sum_{m=1}^{\infty}\sum_{n=1}^{\infty} \frac{4F_z}{\rho h L_x L_y} \sin\left(\frac{m\pi x_0}{L_x}\right) \sin\left(\frac{n\pi y_0}{L_y}\right) \sin\left(\frac{m\pi x}{L_x}\right) \sin\left(\frac{n\pi y}{L_y}\right) \frac{\sin(\omega_{mn} t)}{\omega_{mn}} H(t)
+    % \]
+    
+    % con frecuencias naturales:
+    
+    % \[
+    % \omega_{mn} = \sqrt{\frac{D}{\rho h}} \left[ \left(\frac{m\pi}{L_x}\right)^2 + \left(\frac{n\pi}{L_y}\right)^2 \right]
+    % \]
+    
+    % ## **5. Método de Imágenes**
+    
+    % Para dominios finitos, el método de imágenes proporciona una solución alternativa. La idea es reflejar la fuente en todas las fronteras:
+    
+    % ### **5.1 Para Fronteras Fijas**
+    
+    % Cada imagen tiene signo opuesto a la original:
+    
+    % \[
+    % \mathbf{u}(\mathbf{x}, t) = \sum_{\mathbf{n}\in\mathbb{Z}^3} (-1)^{|\mathbf{n}|} \mathbf{u}_{\infty}(\mathbf{x} - \mathbf{x}_{\mathbf{n}}, t)
+    % \]
+    
+    % donde \(\mathbf{x}_{\mathbf{n}} = (2n_x L_x \pm x_0, 2n_y L_y \pm y_0, 2n_z L_z \pm z_0)\) y \(|\mathbf{n}| = |n_x| + |n_y| + |n_z|\).
+    
+    % ### **5.2 Para Fronteras Libres**
+    
+    % Las imágenes tienen el mismo signo:
+    
+    % \[
+    % \mathbf{u}(\mathbf{x}, t) = \sum_{\mathbf{n}\in\mathbb{Z}^3} \mathbf{u}_{\infty}(\mathbf{x} - \mathbf{x}_{\mathbf{n}}, t)
+    % \]
+    
+    % ## **6. Solución en Series de Fourier**
+    
+    % Para condiciones periódicas, la solución se obtiene mediante transformada de Fourier discreta:
+    
+    % \[
+    % \hat{\mathbf{u}}(\mathbf{k}, t) = \frac{\hat{\mathbf{F}}_0}{\rho} e^{i\mathbf{k}\cdot\mathbf{x}_0} \left[ \frac{\hat{\mathbf{k}}\hat{\mathbf{k}}}{c_p^2 |\mathbf{k}|^2} \frac{\sin(c_p|\mathbf{k}|t)}{|\mathbf{k}|} + \frac{\mathbf{I} - \hat{\mathbf{k}}\hat{\mathbf{k}}}{c_s^2 |\mathbf{k}|^2} \frac{\sin(c_s|\mathbf{k}|t)}{|\mathbf{k}|} \right] H(t)
+    % \]
+    
+    % con \(\mathbf{k} = \left(\frac{2\pi m}{L_x}, \frac{2\pi n}{L_y}, \frac{2\pi p}{L_z}\right)\), \(m,n,p \in \mathbb{Z}\).
+    
+    % ## **7. Energía y Modos Normales**
+    
+    % La energía total se conserva y se distribuye entre los modos:
+    
+    % \[
+    % E(t) = \frac{1}{2} \int_{\Omega} \left[ \rho \left|\frac{\partial \mathbf{u}}{\partial t}\right|^2 + \lambda (\nabla\cdot\mathbf{u})^2 + \mu \sum_{i,j} \left( \frac{\partial u_i}{\partial x_j} + \frac{\partial u_j}{\partial x_i} \right)^2 \right] d\mathbf{x}
+    % \]
+    
+    % Cada modo normal contribuye con energía:
+    
+    % \[
+    % E_{\mathbf{k}}^{\alpha} = \frac{1}{4} \rho (\omega_{\mathbf{k}}^{\alpha})^2 |A_{\mathbf{k}}^{\alpha}|^2 \|\mathbf{U}_{\mathbf{k}}^{\alpha}\|^2
+    % \]
+    
+    % ## **8. Resonancias y Antirresonancias**
+    
+    % Las frecuencias de resonancia ocurren cuando:
+    
+    % \[
+    % \omega = \omega_{\mathbf{k}}^{\alpha} \quad \text{para algún } \mathbf{k}, \alpha
+    % \]
+    
+    % Las antirresonancias ocurren cuando el impacto está en un nodo del modo:
+    
+    % \[
+    % \mathbf{U}_{\mathbf{k}}^{\alpha}(\mathbf{x}_0) \cdot \mathbf{F}_0 = 0
+    % \]
+    
+    % ## **9. Aproximación para Tiempos Cortos**
+    
+    % Para \(t \ll \min(L_x/c_p, L_y/c_p, L_z/c_p)\), la solución es aproximadamente la del medio infinito, ya que las ondas aún no han alcanzado las fronteras:
+    
+    % \[
+    % \mathbf{u}(\mathbf{x}, t) \approx \mathbf{u}_{\infty}(\mathbf{x} - \mathbf{x}_0, t) \quad \text{para } t < t_{\text{reflexión}}
+    % \]
+    
+    % donde \(t_{\text{reflexión}} = \min\left(\frac{d_{\text{min}}}{c_p}\right)\) y \(d_{\text{min}}\) es la distancia mínima a alguna frontera.
+    
+    % ## **10. Ecuación Integral y Función de Green Completa**
+    
+    % La solución formal se puede escribir como:
+    
+    % \[
+    % \mathbf{u}(\mathbf{x}, t) = \int_{0}^{t} \int_{\Omega} \mathbf{G}(\mathbf{x}, \mathbf{x}', t-t') \cdot \mathbf{F}(\mathbf{x}', t') d\mathbf{x}' dt'
+    % \]
+    
+    % donde \(\mathbf{G}\) satisface:
+    
+    % \[
+    % \rho \frac{\partial^2 \mathbf{G}}{\partial t^2} = (\lambda+\mu)\nabla(\nabla\cdot \mathbf{G}) + \mu\nabla^2\mathbf{G} + \mathbf{I}\delta(\mathbf{x}-\mathbf{x}')\delta(t)
+    % \]
+    
+    % con las condiciones de frontera apropiadas.
+    
+    % Para el caso de fronteras fijas, \(\mathbf{G}\) se expande como:
+    
+    % \[
+    % \mathbf{G}(\mathbf{x}, \mathbf{x}', t) = \sum_{\mathbf{k}, \alpha} \frac{\mathbf{U}_{\mathbf{k}}^{\alpha}(\mathbf{x}) \otimes \mathbf{U}_{\mathbf{k}}^{\alpha}(\mathbf{x}')}{\rho \|\mathbf{U}_{\mathbf{k}}^{\alpha}\|^2} \frac{\sin(\omega_{\mathbf{k}}^{\alpha} t)}{\omega_{\mathbf{k}}^{\alpha}} H(t)
+    % \]
+    
+    % ## **11. Solución Numérica por Elementos Finitos**
+    
+    % Para geometrías complejas o condiciones de frontera no triviales, el método de elementos finitos discretiza el dominio en elementos y aproxima:
+    
+    % \[
+    % \mathbf{u}(\mathbf{x}, t) \approx \sum_{i=1}^{N} \mathbf{N}_i(\mathbf{x}) \mathbf{q}_i(t)
+    % \]
+    
+    % donde \(\mathbf{N}_i\) son las funciones de forma y \(\mathbf{q}_i\) los grados de libertad nodales. Esto lleva al sistema:
+    
+    % \[
+    % \mathbf{M}\ddot{\mathbf{q}} + \mathbf{K}\mathbf{q} = \mathbf{F}(t)
+    % \]
+    
+    % con \(\mathbf{M}\) la matriz de masa y \(\mathbf{K}\) la matriz de rigidez.
+    
+    % ## **Conclusión**
+    
+    % La solución de la ecuación de ondas elásticas en una losa rectangular con condiciones de frontera requiere métodos avanzados como expansión en modos normales, método de imágenes, o transformadas de Fourier discretas. La solución revela fenómenos importantes como resonancias, reflexiones e interferencias, cruciales para aplicaciones en ingeniería sísmica, pruebas no destructivas y diseño estructural.
+    
+    
+    
+    % #### **Desglose detallado de cada término:**
+    
+    % 1. **Contribución de la onda P (compresional, longitudinal):**
+    % \[
+    % \mathbf{u}_P(\mathbf{x}, t) = \frac{H(t)}{4\pi\rho c_p^2} \frac{(\hat{\mathbf{x}} \cdot \mathbf{F}_0) \hat{\mathbf{x}}}{r} \ \delta\left(t - \frac{r}{c_p}\right)
+    % \]
+    % - **Dirección:** Paralela a \(\hat{\mathbf{x}}\) (radial). Solo la componente de \(\mathbf{F}_0\) en la dirección radial excita esta onda.
+    % - **Forma:** Un pulso instantáneo (delta) que llega en el tiempo \(t = r/c_p\).
+    % - **Decaimiento:** Amplitud \(\propto 1/r\).
+    
+    % 2. **Contribución de la onda S (cortante, transversal):**
+    % \[
+    % \mathbf{u}_S(\mathbf{x}, t) = \frac{H(t)}{4\pi\rho c_s^2} \frac{\mathbf{F}_0 - (\hat{\mathbf{x}} \cdot \mathbf{F}_0)\hat{\mathbf{x}}}{r} \ \delta\left(t - \frac{r}{c_s}\right)
+    % \]
+    % - **Dirección:** Perpendicular a \(\hat{\mathbf{x}}\). Corresponde a la componente de \(\mathbf{F}_0\) tangencial a la superficie esférica.
+    % - **Forma:** Pulso instantáneo que llega en \(t = r/c_s\).
+    % - **Decaimiento:** Amplitud \(\propto 1/r\).
+    
+    % 3. **Contribución del campo cercano (near-field):**
+    % \[
+    % \mathbf{u}_{NF}(\mathbf{x}, t) = \frac{H(t)}{4\pi\rho r^3} \mathbf{H}\left(t - \frac{r}{c_p}, t - \frac{r}{c_s}\right) \cdot \mathbf{F}_0
+    % \]
+    % Donde el tensor \(\mathbf{H}\) tiene la forma explícita:
+    % \[
+    % \mathbf{H}(\tau_p, \tau_s) = \left(3\hat{\mathbf{x}}\hat{\mathbf{x}} - \mathbf{I}\right) \left[ t \left( H(t - \tau_s) - H(t - \tau_p) \right) \right] \quad \text{con } \tau_p = \frac{r}{c_p}, \ \tau_s = \frac{r}{c_s}.
+    % \]
+    % - **Dirección:** Combinación de componentes radiales y transversales, dada por el tensor \(3\hat{\mathbf{x}}\hat{\mathbf{x}} - \mathbf{I}\).
+    % - **Forma:** No es un pulso, sino una **señal continua de duración finita** que existe entre la llegada de la onda P y la onda S, es decir, para \(\frac{r}{c_p} \le t \le \frac{r}{c_s}\). Fuera de ese intervalo, este término es cero.
+    % - **Decaimiento:** Amplitud \(\propto 1/r^3\), por lo que domina solo cerca de la fuente (\(r\) pequeña).
+    
+    
+    
+
+    % \subsection{Solución aproximada: ondas concéntricas}
+    
+    % En un medio elástico e isótropo la solución del impacto es
+    % \[ u(r,t) \approx \frac{F_0}{2\pi \rho c^2 r}~ H\left(t-\frac{r}{c}\right) \]
+    % donde $r = \sqrt{x^2+y^2}$ y $H$ es la función escalón.
+    
+    % Esto significa que las ondas se propagan formando círculos concéntricos.
+
+    % \subsection{Por qué aparecen patrones elípticos en rocas}
+    
+    % Si la roca no es isotrópica (muy común en lozas), las ondas no viajan igual en todas las direcciones.
+    
+    % Esto se modela usando velocidades diferentes según dirección ($c_x \neq c_y$)
+    
+    % Entonces la ecuación es:
+    % \[ \rho \frac{\partial^2 u}{\partial t^2} = c_x^2 \frac{\partial^2 u}{\partial x^2} + c_y^2 \frac{\partial^2 u}{\partial y^2} \]
+    
+    % La solución ya no forma círculos sino elipses
+    % \[ \frac{x^2}{(c_x t)^2} + \frac{y^2}{(c_y t)^2} = 1 \]
+    % Esto podría explicar por qué aparecen patrones elípticos en las lozas (la onda se propaga más rápido en un eje que en otro).
+    
+    % \subsection{Fracturas generadas por impacto (modelos de grietas)}
+    
+    % Si el impacto excede la resistencia de la roca, se generan fracturas.
+    % La ecuación que gobierna la apertura de una grieta está dada por \textbf{Ley de Griffith} (inicio de fractura:
+    % \[ \sigma_c = \sqrt{\frac{2 E \gamma}{\pi a}} \]
+    % donde $E$ es el módulo de Young, $\gamma$ la energía superficial y $a$ la longitud inicial de defecto.
+    
+    % Si el impacto genera una onda con $\sigma_{\text{onda}} > \sigma_c$ entonces aparece una grieta
+    
+    % \subsection{Forma de la grieta por impacto}
+    
+    % Si el impacto es perpendicular
+    % \[ \text{Grietas radiales + círculos concéntricos (conos Hertzianos)} \]
+    % Si hay anisotropía:
+    % \[ \text{Elipses concéntricas + fracturas en forma de abanico} \]
+    % Esto coincide con muchos patrones en rocas y lozas.
 \end{document}
+
+
+
+% #### **Interpretación física completa:**
+    
+    % 1. **Cronología de la señal en un punto \(\mathbf{x}\):**
+    % - Para \(t < r/c_p\): \(\mathbf{u} = \mathbf{0}\) (la perturbación aún no ha llegado).
+    % - En \(t = r/c_p\): Llega un pulso brusco (onda P) en dirección radial.
+    % - Para \(r/c_p < t < r/c_s\): Existe una "cola" de deformación decaimiento, el campo cercano \(\mathbf{u}_{NF}\), que oscila o varía suavemente.
+    % - En \(t = r/c_s\): Llega un segundo pulso brusco (onda S) en dirección transversal.
+    % - Para \(t > r/c_s\): En un medio ideal sin atenuación, el desplazamiento vuelve a cero (porque las deltas ya pasaron y el campo cercano se apaga). En la realidad, la atenuación y las reflexiones modifican esto.
+    
+    % 2. **Patrón de radiación:**
+    % - La amplitud de la **onda P** es máxima cuando el vector fuerza \(\mathbf{F}_0\) es paralelo a la dirección de observación \(\hat{\mathbf{x}}\) (\(\hat{\mathbf{x}} \cdot \mathbf{F}_0\) máximo). Es cero si \(\mathbf{F}_0\) es perpendicular a \(\hat{\mathbf{x}}\).
+    % - La amplitud de la **onda S** es máxima cuando \(\mathbf{F}_0\) es perpendicular a \(\hat{\mathbf{x}}\), y cero si son paralelos.
+    
+    % 3. **Dependencia con la distancia:**
+    % - A **grandes distancias** (\(r\) grande), los términos de campo lejano (\(\propto 1/r\)) dominan. Los sismómetros lejanos registran principalmente dos pulsos claramente separados: P y S.
+    % - **Cerca del impacto** (\(r\) pequeña), el campo cercano (\(\propto 1/r^3\)) es muy intenso y la señal es una superposición compleja de deformaciones transitorias.
+    
+    % ---
+    
+    % #### **Forma alternativa (integral útil para fuerzas no delta):**
+    
+    % Si la fuerza tiene una forma temporal \(s(t)\) (una función suave que representa la duración finita del impacto) y sigue siendo puntual en el espacio \(\mathbf{F}(\mathbf{x},t) = \mathbf{F}_0 \delta(\mathbf{x}) s(t)\), entonces la solución se obtiene por convolución temporal:
+    
+    % \[
+    % \mathbf{u}(\mathbf{x}, t) = \frac{1}{4\pi\rho} \left[ \frac{\hat{\mathbf{x}}\hat{\mathbf{x}} \cdot \mathbf{F}_0}{c_p^2 r} \ s\left(t - \frac{r}{c_p}\right) + \frac{(\mathbf{I} - \hat{\mathbf{x}}\hat{\mathbf{x}}) \cdot \mathbf{F}_0}{c_s^2 r} \ s\left(t - \frac{r}{c_s}\right) + \frac{1}{r^3} \int_{0}^{t} \mathbf{h}(\tau; r) \cdot \mathbf{F}_0 \ s(t-\tau) d\tau \right] H(t),
+    % \]
+    
+    % donde \(\mathbf{h}\) es el núcleo del campo cercano (la antitransformada de lo anterior). En la práctica, para impactos breves, \(s(t)\) puede aproximarse por una delta y recuperamos la solución dada arriba.
+    
+    % ---
+    
+    % ### **Conclusión**
+    
+    % La solución explícita muestra que un impacto puntual y breve genera un campo de desplazamientos con **tres componentes distinguibles**: dos ondas viajeras esféricas (P y S) que transportan energía a largas distancias, y un campo cercano que confina energía deformativa cerca de la fuente. Esta solución es fundamental en sismología para entender la radiación de fuentes símicas y en ingeniería para analizar la respuesta dinámica de estructuras a impactos.
+    
+    
