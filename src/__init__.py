@@ -13,3 +13,6 @@ MODELS_DIR = "./models/"
 
 # tamaño de las imagenes
 IMAGE_SIZE = (358, 232)  # (width, height)
+
+# tamaño para imagenes rotadas y traslatadas
+ALIGNED_IMAGE_SIZE = (400, 400)  # (width, height)

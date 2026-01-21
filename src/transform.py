@@ -1,5 +1,6 @@
 import cv2 as cv2
 import numpy as np
+from src import ALIGNED_IMAGE_SIZE
 
 def clean_images(images:list[np.ndarray]) -> list[dict[str, np.ndarray]]:
     results = []
@@ -23,30 +24,6 @@ def clean_images(images:list[np.ndarray]) -> list[dict[str, np.ndarray]]:
     return results
 
 
-
-# vamos a trabajar de la siguiente manera, seleccionamos los centros manualmente
-
-def select_centers(images: list[np.ndarray]) -> list[list[int, int]]:
-    centers = []
-
-    def click_event(event, x, y, flags, params):
-        if event == cv2.EVENT_LBUTTONDOWN:
-            centers.append([x, y])
-            cv2.circle(img, (x, y), 3, (0, 255, 0), -1)
-            cv2.imshow("image", img)
-
-    for img in images:
-        img = img.copy()
-        cv2.imshow("image", img)
-        cv2.setMouseCallback("image", click_event)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-
-    return centers
-
-# seleccionar dos puntos (estos definen un recta), al colocar vertical la
-# recta se rota la imagen 
-
 def select_rotation_line(image: np.ndarray) -> list[list[int, int], list[int, int]]:
     points = []
 
@@ -60,7 +37,7 @@ def select_rotation_line(image: np.ndarray) -> list[list[int, int], list[int, in
             cv2.circle(img, (x, y), 3, (0, 255, 0), -1)
             cv2.imshow("image", img)
 
-    img = image.copy()
+    img = image #image.copy()
     cv2.imshow("image", img)
     cv2.setMouseCallback("image", click_event)
 
@@ -73,6 +50,27 @@ def select_rotation_line(image: np.ndarray) -> list[list[int, int], list[int, in
 
     return points
 
+def align(images:list[np.ndarray], lines_points:\
+          list[list[int, int], list[int, int]]) -> list[np.ndarray]:
+    
+    """  """
+    global_center = np.mean(lines_points, axis=0, dtype=int)[0]
+    
+    aligned_images = []
+    for img, points in zip(images, lines_points):
+        center, p2 = points
+        angle = np.arctan2(p2[1] - center[1], p2[0] - center[0]) * 180 / np.pi
+        
+        rotation_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
+        translation_matrix = np.float32([[1, 0, global_center[0] - center[0]],\
+                                         [0, 1, global_center[1] - center[1]]])
+
+        rotated_img = cv2.warpAffine(img, rotation_matrix, ALIGNED_IMAGE_SIZE)
+        aligned_image = cv2.warpAffine(rotated_img, translation_matrix, ALIGNED_IMAGE_SIZE)
+
+        aligned_images.append(aligned_image)
+
+    return aligned_images
     
 
 if __name__ == "__main__":
@@ -90,9 +88,8 @@ if __name__ == "__main__":
 
     ########################### VISUALIZAR RESULTADOS ##########################
 
-    centers = select_centers(images)
-    # lines = [ select_rotation_line(img) for img in images]
+    lines_points = [ select_rotation_line(img) for img in images ]
+    aligned_images = align(images, lines_points)
 
-    
-
-    
+    show_images(images, names)
+    show_images(aligned_images, names)
