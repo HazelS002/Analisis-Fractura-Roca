@@ -1,6 +1,6 @@
 import cv2 as cv2
 import numpy as np
-from src import ALIGNED_IMAGE_SIZE
+from src import TRANSFORMATION_MARGIN
 
 def clean_images(images:list[np.ndarray]) -> list[dict[str, np.ndarray]]:
     results = []
@@ -33,16 +33,16 @@ def select_rotation_line(image: np.ndarray) -> list[list[int, int], list[int, in
             
             if len(points) == 2:
                 cv2.line(img, tuple(points[0]), tuple(points[1]), (0, 255, 0), 2)
-            
             cv2.circle(img, (x, y), 3, (0, 255, 0), -1)
+
             cv2.imshow("image", img)
 
     img = image #image.copy()
+    cv2.namedWindow("image", cv2.WINDOW_GUI_EXPANDED)
     cv2.imshow("image", img)
-    cv2.setMouseCallback("image", click_event)
 
-
-    cv2.waitKey(0)
+    cv2.setMouseCallback("image", click_event) ; cv2.waitKey(0)
+    
     cv2.destroyAllWindows()
 
     if len(points) != 2:
@@ -54,28 +54,26 @@ def align(images:list[np.ndarray], lines_points:\
           list[list[int, int], list[int, int]]) -> list[np.ndarray]:
     
     """  """
-    global_center = np.mean(lines_points, axis=0, dtype=int)[0]
+    global_center = np.array(TRANSFORMATION_MARGIN) // 2
     
     aligned_images = []
     for img, points in zip(images, lines_points):
         center, p2 = points
         angle = np.arctan2(p2[1] - center[1], p2[0] - center[0]) * 180 / np.pi
+
+        transformation_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
+        transformation_matrix[0, 2] += (global_center[0] - center[0])
+        transformation_matrix[1, 2] += (global_center[1] - center[1])
         
-        rotation_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
-        translation_matrix = np.float32([[1, 0, global_center[0] - center[0]],\
-                                         [0, 1, global_center[1] - center[1]]])
-
-        rotated_img = cv2.warpAffine(img, rotation_matrix, ALIGNED_IMAGE_SIZE)
-        aligned_image = cv2.warpAffine(rotated_img, translation_matrix, ALIGNED_IMAGE_SIZE)
-
+        aligned_image = cv2.warpAffine(img, transformation_matrix,
+                                       TRANSFORMATION_MARGIN)
         aligned_images.append(aligned_image)
 
     return aligned_images
     
 
 if __name__ == "__main__":
-    """ Prueba de la función de limpieza de imagenes y
-    visualización de etapas. """
+    """ """
     from src import SAMPLE_DATA_DIR, IMAGE_SIZE
     from src.load_images import read_images
     from src.visualitation import show_images
@@ -86,10 +84,13 @@ if __name__ == "__main__":
     images, names = read_images(SAMPLE_DATA_DIR + "images/", IMAGE_SIZE)
     # results = clean_images(images)    # aplicar limpieza
 
-    ########################### VISUALIZAR RESULTADOS ##########################
+    ############################# ALINEAR IMAGENES ############################
 
     lines_points = [ select_rotation_line(img) for img in images ]
     aligned_images = align(images, lines_points)
+
+
+    ########################### VISUALIZAR RESULTADOS ##########################
 
     show_images(images, names)
     show_images(aligned_images, names)
