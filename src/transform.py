@@ -24,7 +24,8 @@ def clean_images(images:list[np.ndarray]) -> list[dict[str, np.ndarray]]:
     return results
 
 
-def select_rotation_line(image: np.ndarray) -> list[list[int, int], list[int, int]]:
+def select_rotation_line(image: np.ndarray, draw_line:bool=True)\
+    -> list[list[int, int], list[int, int]]:
     points = []
 
     def click_event(event, x, y, flags, params):
@@ -37,12 +38,11 @@ def select_rotation_line(image: np.ndarray) -> list[list[int, int], list[int, in
 
             cv2.imshow("image", img)
 
-    img = image #image.copy()
+    img = image.copy() if not draw_line else image
     cv2.namedWindow("image", cv2.WINDOW_GUI_EXPANDED)
     cv2.imshow("image", img)
 
     cv2.setMouseCallback("image", click_event) ; cv2.waitKey(0)
-    
     cv2.destroyAllWindows()
 
     if len(points) != 2:
@@ -66,7 +66,9 @@ def align(images:list[np.ndarray], lines_points:\
         transformation_matrix[1, 2] += (global_center[1] - center[1])
         
         aligned_image = cv2.warpAffine(img, transformation_matrix,
-                                       TRANSFORMATION_MARGIN)
+                                       TRANSFORMATION_MARGIN,
+                                       borderMode=cv2.BORDER_CONSTANT,
+                                       borderValue=255)
         aligned_images.append(aligned_image)
 
     return aligned_images
@@ -75,22 +77,19 @@ def align(images:list[np.ndarray], lines_points:\
 if __name__ == "__main__":
     """ """
     from src import SAMPLE_DATA_DIR, IMAGE_SIZE
-    from src.load_images import read_images
+    from src.load_images import read_images, save_images
     from src.visualitation import show_images
 
-    ############################# LEER IMAGENES ###############################
-
-    # # Descomentar para probar la limpieza de imagenes
+    # leer imagenes
     images, names = read_images(SAMPLE_DATA_DIR + "images/", IMAGE_SIZE)
-    # results = clean_images(images)    # aplicar limpieza
 
-    ############################# ALINEAR IMAGENES ############################
-
-    lines_points = [ select_rotation_line(img) for img in images ]
+    # alinear imagenes
+    lines_points = [ select_rotation_line(img, draw_line=False)\
+                    for img in images ]
     aligned_images = align(images, lines_points)
 
+    # ver resultados
+    show_images(images, names) ; show_images(aligned_images, names)
 
-    ########################### VISUALIZAR RESULTADOS ##########################
-
-    show_images(images, names)
-    show_images(aligned_images, names)
+    # guardar imagenes
+    save_images(aligned_images, names, SAMPLE_DATA_DIR + "aligned-images/")
