@@ -84,12 +84,14 @@ if __name__ == "__main__":
     images, names = read_images(SAMPLE_DATA_DIR + "images/", IMAGE_SIZE)
 
     # alinear imagenes
-    lines_points = [ select_rotation_line(img, draw_line=False)\
+    # lines_points = [ select_rotation_line(img, draw_line=False)\
+    #                 for img in images ]
+    lines_points = [ select_rotation_line(img, draw_line=True)\
                     for img in images ]
     aligned_images = align(images, lines_points)
 
     # ver resultados
     show_images(images, names) ; show_images(aligned_images, names)
 
-    # guardar imagenes
-    save_images(aligned_images, names, SAMPLE_DATA_DIR + "aligned-images/")
+    # # guardar imagenes
+    # save_images(aligned_images, names, SAMPLE_DATA_DIR + "aligned-images/")

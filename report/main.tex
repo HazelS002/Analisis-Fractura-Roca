@@ -262,4 +262,40 @@
     con condiciones iniciales
     \[ \mathbf{u}(\mathbf{x}, 0) = \mathbf{0}, \quad \frac{\partial \mathbf{u}}{\partial t}(\mathbf{x}, 0) = \mathbf{0} \]
     y condiciones de frontera en las seis caras del dominio.
+
+
+    \section{Factorización no negativa de matrices}
+    \section{Factorización de Matrices No Negativas (NMF)}
+
+Dada una matriz no negativa \(\mathbf{V} \in \mathbb{R}^{m \times n}_{\geq 0}\), 
+NMF busca aproximarla como el producto de dos matrices no negativas:
+
+\[
+\mathbf{V} \approx \mathbf{W} \mathbf{H}, \quad 
+\mathbf{W} \in \mathbb{R}^{m \times k}_{\geq 0}, \quad 
+\mathbf{H} \in \mathbb{R}^{k \times n}_{\geq 0}
+\]
+
+donde \(k \ll \min(m, n)\) es el número de componentes.
+
+\subsection{Interpretabilidad Aditiva}
+
+La restricción de no negatividad es clave para la interpretación física:
+\begin{itemize}
+    \item Cada componente \(\mathbf{w}_i\) (columna de \(\mathbf{W}\)) 
+    representa un \textit{patrón base} o \textit{parte} del sistema.
+    
+    \item Las entradas de \(\mathbf{H}\) indican cómo se combinan 
+    estos patrones para reconstruir las observaciones.
+    
+    \item La aproximación es puramente \textit{aditiva}:
+    \[
+    \mathbf{v}_j \approx \sum_{i=1}^k h_{ij} \mathbf{w}_i
+    \]
+    sin cancelaciones por coeficientes negativos.
+\end{itemize}
+
+Esta propiedad permite interpretar los componentes como 
+características constitutivas de los datos, siendo 
+especialmente útil en imágenes, texto y datos espectrales.
 \end{document}
