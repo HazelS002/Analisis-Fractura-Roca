@@ -36,20 +36,15 @@ if __name__ == "__main__":
     # promediar imagenes
     show_images([np.mean(images, axis=0).astype(np.uint8)], ["Average Image"])
 
-    # aplicar metodo del codo para numero de componentes
-    _, _, _, errors = zip(*[
-        apply_nmf(images, n_components=k, max_iter=500, random_state=42)
-        for k in range(1, 12)
-    ])
-
+    # Evaluar error de reconstrucción para diferentes números de componentes
+    errors = [ apply_nmf(images, n_components=k, max_iter=500,
+                         random_state=42)[3] for k in range(1, 12) ]
     plot_reconstruction_error(errors, list(range(1, 12)))
 
     # aplicar NMF
-    nmf_images, W, H, _ = apply_nmf(images, n_components=6, max_iter=500,
-                                 random_state=42)
-    show_images(nmf_images, names)
-
-    show_nmf_components(H, W, images[0].shape)
-
-
-    
+    for k in [2, 6]:
+        print(f"\nNMF con {k} componentes...")
+        nmf_images, W, H, _ = apply_nmf(images, n_components=k, max_iter=500,
+                                        random_state=42)
+        show_images(nmf_images, names)
+        show_nmf_components(H, W, images[0].shape)
