@@ -54,5 +54,10 @@ def show_nmf_components(H:np.ndarray, W:np.ndarray,
     show_images(components, titles)
     return
 
+def plot_reconstruction_error(errors:list[float], components:list[int]) -> None:
+    plt.plot(components, errors, color='red', marker='o')
+    plt.xlabel("Number of components") ; plt.ylabel("Reconstruction error")
+    plt.show()
+    return
 
 if __name__ == "__main__": pass

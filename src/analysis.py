@@ -24,23 +24,17 @@ def apply_nmf(images: list[np.ndarray], **nmf_params)\
 if __name__ == "__main__":
     from src import SAMPLE_DATA_DIR
     from src.load_images import read_images
-    from src.visualitation import show_images, show_nmf_components
+    from src.visualitation import show_images, show_nmf_components,\
+        plot_reconstruction_error
     from src.transform import clean_images
     from src.utils import get_stage_images
 
     # leer y limpiar imagenes
     images, names = read_images(SAMPLE_DATA_DIR + "aligned-images/")
     images = get_stage_images(clean_images(images), "cleaned")
-
-    # # ver imagenes
-    # show_images(images, names)
-
-    # # promediar imagenes
-    from matplotlib import pyplot as plt
-    #
-    # result = np.mean(images, axis=0).astype(np.uint8)
-    # plt.imshow(result, cmap="gray")
-    # plt.show()
+    
+    # promediar imagenes
+    show_images([np.mean(images, axis=0).astype(np.uint8)], ["Average Image"])
 
     # aplicar metodo del codo para numero de componentes
     _, _, _, errors = zip(*[
@@ -48,9 +42,7 @@ if __name__ == "__main__":
         for k in range(1, 12)
     ])
 
-    plt.plot(range(1, 12), errors, color='red', marker='o')
-    plt.xlabel("Number of components") ; plt.ylabel("Reconstruction error")
-    plt.show()
+    plot_reconstruction_error(errors, list(range(1, 12)))
 
     # aplicar NMF
     nmf_images, W, H, _ = apply_nmf(images, n_components=6, max_iter=500,
