@@ -3,7 +3,7 @@ import cv2 as cv2
 from sklearn.decomposition import NMF
 
 def apply_nmf(images: list[np.ndarray], **nmf_params)\
-    -> tuple[list[np.ndarray], np.ndarray, np.ndarray]:
+    -> tuple[list[np.ndarray], np.ndarray, np.ndarray, float]:
     
     # Convertir la lista de imágenes a una matriz 2D
     n_samples, images_shape = len(images), images[0].shape
@@ -18,7 +18,7 @@ def apply_nmf(images: list[np.ndarray], **nmf_params)\
     reconstructed_images = [ (np.dot(W[i,:], H).reshape(images_shape))\
                             .astype(np.uint8) for i in range(n_samples)]
 
-    return reconstructed_images, W, H
+    return reconstructed_images, W, H, nmf_model.reconstruction_err_
 
 
 if __name__ == "__main__":
@@ -36,14 +36,24 @@ if __name__ == "__main__":
     # show_images(images, names)
 
     # # promediar imagenes
-    # from matplotlib import pyplot as plt
+    from matplotlib import pyplot as plt
     #
     # result = np.mean(images, axis=0).astype(np.uint8)
     # plt.imshow(result, cmap="gray")
     # plt.show()
 
+    # aplicar metodo del codo para numero de componentes
+    _, _, _, errors = zip(*[
+        apply_nmf(images, n_components=k, max_iter=500, random_state=42)
+        for k in range(1, 12)
+    ])
+
+    plt.plot(range(1, 12), errors, color='red', marker='o')
+    plt.xlabel("Number of components") ; plt.ylabel("Reconstruction error")
+    plt.show()
+
     # aplicar NMF
-    nmf_images, W, H = apply_nmf(images, n_components=4, max_iter=500,
+    nmf_images, W, H, _ = apply_nmf(images, n_components=6, max_iter=500,
                                  random_state=42)
     show_images(nmf_images, names)
 
