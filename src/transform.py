@@ -1,6 +1,7 @@
 import cv2 as cv2
 import numpy as np
 from src import TRANSFORMATION_MARGIN
+from src.load_images import save_images
 
 def clean_images(images:list[np.ndarray]) -> list[dict[str, np.ndarray]]:
     results = []
@@ -72,12 +73,25 @@ def align(images:list[np.ndarray], lines_points:\
         aligned_images.append(aligned_image)
 
     return aligned_images
+
+
+def transform(images:list[np.ndarray], names:list[str] | None = None,
+              saving_dir: str | None = None) -> list[np.ndarray]:
+    """  """
+
+    lines_points = [ select_rotation_line(img, draw_line=(saving_dir is None))\
+                    for img in images ]
+    aligned_images = align(images, lines_points)
+
+    # guardar imagenes
+    if saving_dir is not None: save_images(aligned_images, names, saving_dir)
+    return aligned_images
     
 
 if __name__ == "__main__":
     """ """
     from src import SAMPLE_DATA_DIR, IMAGE_SIZE
-    from src.load_images import read_images, save_images
+    from src.load_images import read_images
     from src.visualitation import show_images
 
     for_saving = False
@@ -86,13 +100,10 @@ if __name__ == "__main__":
     images, names = read_images(SAMPLE_DATA_DIR + "images/", IMAGE_SIZE)
 
     # alinear imagenes
-    lines_points = [ select_rotation_line(img, draw_line=(not for_saving))\
-                    for img in images ]
-    aligned_images = align(images, lines_points)
-
-    # ver resultados
-    show_images(images, names) ; show_images(aligned_images, names)
-
-    # guardar imagenes
-    if for_saving:
-        save_images(aligned_images, names, SAMPLE_DATA_DIR + "aligned-images/")
+    aligned_images = transform(images, names=names if for_saving else None,
+                               saving_dir=(SAMPLE_DATA_DIR + "aligned-images/")
+                               if for_saving else None)
+    
+    # mostrar imagenes
+    show_images(aligned_images, names)
+    
