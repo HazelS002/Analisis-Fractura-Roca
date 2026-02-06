@@ -1,14 +1,18 @@
 from matplotlib import pyplot as plt
 import numpy as np
 
+plt.rcParams["figure.constrained_layout.use"] = True
 
-def show_images(images: list, names: list[str], show: bool = True):
+
+def show_images(images: list, names: list[str], show: bool = True,
+                suptitle: str | None = None, **fig_kw):
     """Muestra una lista de imágenes."""
     n_images = len(images)
     n_cols = int(np.ceil(np.sqrt(n_images)))
     n_rows = int(np.ceil(n_images / n_cols))
     
-    fig, axes = plt.subplots(nrows=n_rows, ncols=n_cols, squeeze=False)
+    fig, axes = plt.subplots(nrows=n_rows,ncols=n_cols,squeeze=False,**fig_kw)
+    if suptitle is not None: fig.suptitle(suptitle)
     
     for i, (img, name) in enumerate(zip(images, names)):
         r, c = i // n_cols, i % n_cols

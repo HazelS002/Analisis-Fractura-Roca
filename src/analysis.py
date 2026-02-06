@@ -36,7 +36,8 @@ if __name__ == "__main__":
     images = get_stage_images(clean_images(images), "cleaned")
     
     # promediar imagenes
-    show_images([np.mean(images, axis=0).astype(np.uint8)], ["Average Image"])
+    show_images([np.mean(images, axis=0).astype(np.uint8)], ["Average Image"],
+                suptitle="Average of Aligned and Cleaned Images")
 
     # Evaluar error de reconstrucción para diferentes números de componentes
     errors = [ apply_nmf(images, n_components=k, **NMF_PARAMS)[3]\
@@ -48,4 +49,5 @@ if __name__ == "__main__":
         print(f"\nNMF con {k} componentes...")
         nmf_images, W, H, _ = apply_nmf(images, n_components=k, **NMF_PARAMS)
         show_nmf_components(H, W, images[0].shape)
-        show_images(nmf_images, names)
+        show_images(nmf_images, names,
+                    suptitle=f"NMF Reconstruction with {k} Components")

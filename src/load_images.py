@@ -43,4 +43,4 @@ if __name__ == "__main__":
     from src import SAMPLE_DATA_DIR, IMAGE_SIZE
 
     images, names = read_images(SAMPLE_DATA_DIR + "images/", IMAGE_SIZE)
-    show_images(images, names)
+    show_images(images, names, suptitle="Imagenes originales")

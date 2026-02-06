@@ -105,5 +105,5 @@ if __name__ == "__main__":
                                if for_saving else None)
     
     # mostrar imagenes
-    show_images(aligned_images, names)
+    show_images(aligned_images, names, suptitle="Aligned Images")
     
