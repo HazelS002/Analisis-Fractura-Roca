@@ -20,10 +20,20 @@ def pdf_to_image(pdfs_dir, images_dir, format="png", quality=2):
             pix = page.get_pixmap(matrix=fitz.Matrix(quality, quality))
             
             output_name = f"{os.path.splitext(file)[0]}.{format}"
-            pix.save(os.path.join(images_dir, output_name))
+            output_path = os.path.join(images_dir, output_name)
+
+            temp = 1
+            while os.path.exists(output_path):
+                output_name = f"{os.path.splitext(file)[0]}({temp}).{format}"
+                output_path = os.path.join(images_dir, output_name)
+                temp += 1
+
+           
+            pix.save(output_path)
             doc.close()
 
             print(f"{file} -> image")
 
 if __name__ == "__main__":
-    pass
+    for batch_dir in os.listdir("../data/raw/"):
+        pdf_to_image(batch_dir, "../data/processed/png-images/")

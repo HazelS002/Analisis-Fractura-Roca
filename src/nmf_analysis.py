@@ -23,7 +23,7 @@ def apply_nmf(images: list[np.ndarray], **nmf_params)\
 
 
 if __name__ == "__main__":
-    from src import SAMPLE_DATA_DIR, NMF_PARAMS
+    from src import PROCESSED_IMAGES_DIR, NMF_PARAMS
     from src.load_images import read_images
     from src.visualitation import show_images, show_nmf_components,\
         plot_reconstruction_error
@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     
     # leer y limpiar imagenes
-    images, names = read_images(SAMPLE_DATA_DIR + "aligned-images/")
+    images, names = read_images(PROCESSED_IMAGES_DIR + "aligned-images/")
     images = get_stage_images(clean_images(images), "cleaned")
     
     # promediar imagenes

@@ -90,19 +90,19 @@ def transform(images:list[np.ndarray], names:list[str] | None = None,
 
 if __name__ == "__main__":
     """ """
-    from src import SAMPLE_DATA_DIR, IMAGE_SIZE
+    from src import PROCESSED_IMAGES_DIR, IMAGE_SIZE
     from src.load_images import read_images
     from src.visualitation import show_images
 
     for_saving = False
 
     # leer imagenes
-    images, names = read_images(SAMPLE_DATA_DIR + "images/", IMAGE_SIZE)
+    images, names = read_images(PROCESSED_IMAGES_DIR + "png-images/", IMAGE_SIZE)
 
     # alinear imagenes
-    aligned_images = transform(images, names=names if for_saving else None,
-                               saving_dir=(SAMPLE_DATA_DIR + "aligned-images/")
-                               if for_saving else None)
+    param_names, saving_dir = names, PROCESSED_IMAGES_DIR + "aligned-images/"\
+        if for_saving else None, None
+    aligned_images = transform(images, names=param_names, saving_dir=saving_dir)
     
     # mostrar imagenes
     show_images(aligned_images, names, suptitle="Aligned Images")

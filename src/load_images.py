@@ -40,7 +40,9 @@ def save_images(images:list[np.ndarray], names:list[str], dir:str) -> None:
 if __name__ == "__main__":
     """ Prueba de la función de lectura de imagenes. """
     from src.visualitation import show_images
-    from src import SAMPLE_DATA_DIR, IMAGE_SIZE
+    from src import PROCESSED_IMAGES_DIR, IMAGE_SIZE
 
-    images, names = read_images(SAMPLE_DATA_DIR + "images/", IMAGE_SIZE)
+    dir = PROCESSED_IMAGES_DIR + "png-images/"
+    images, names = read_images(dir, IMAGE_SIZE)
+    print(f"{len(images)} read from " + dir)
     show_images(images, names, suptitle="Imagenes originales")

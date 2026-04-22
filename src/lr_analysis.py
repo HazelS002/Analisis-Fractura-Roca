@@ -1,6 +1,5 @@
 import numpy as np
-from src import SAMPLE_DATA_DIR, TRANSFORMATION_MARGIN
-from src.load_images import read_images
+from src import TRANSFORMATION_MARGIN
 from src.transform import clean_images
 from src.utils import get_stage_images
 from sklearn.linear_model import LogisticRegression
@@ -14,22 +13,22 @@ def create_random_images(size: tuple[int, int], n_images: int, noise_level:\
 
 
 
-def create_data(shuffle: bool = True) -> tuple[list[np.ndarray], list[int]]:
+def create_data(original_images) -> tuple[list[np.ndarray], list[int]]:
     
-    # leer y limpiar imagenes
-    images, _ = read_images(SAMPLE_DATA_DIR + "aligned-images/")
-    images = get_stage_images(clean_images(images), "cleaned")
+    # limpira imagenes originales
+    images = get_stage_images(clean_images(original_images), "cleaned")
     
     # crear imagenes aleatorias
-    fake_images = create_random_images(TRANSFORMATION_MARGIN, 12, 0.2)
+    fake_images = create_random_images(TRANSFORMATION_MARGIN, len(images), 0.2)
 
+    # concatenar y etiquetar imagenes
     all_images = images + fake_images
     labels = [1]*len(images) + [0]*len(fake_images)
 
-    if shuffle:
-        perm = np.random.permutation(len(all_images))
-        all_images = [all_images[i] for i in perm]
-        labels = [labels[i] for i in perm]
+    # permutar imagenes
+    perm = np.random.permutation(len(all_images))
+    all_images = [all_images[i] for i in perm]
+    labels = [labels[i] for i in perm]
 
     return all_images, labels
 
@@ -39,10 +38,15 @@ def apply_lr(Images, labels, **lr_kw):
     return lr
 
 if __name__ == "__main__":    
+    from src.load_images import read_images
     from src.visualitation import show_images
+    from src import PROCESSED_IMAGES_DIR
 
-    images, labels = create_data(shuffle=True)
-    # show_images(images, labels, suptitle="Generated Dataset")
+
+    original_images, _ = read_images(PROCESSED_IMAGES_DIR + "aligned-images/")
+
+    images, labels = create_data(original_images)
+    show_images(images, labels, suptitle="Generated Dataset")
 
     lr_model = apply_lr(images, labels, max_iter=1000)
     show_images([np.array(lr_model.coef_).reshape(TRANSFORMATION_MARGIN)], ["LR Coefficients"])

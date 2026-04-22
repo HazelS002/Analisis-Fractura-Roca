@@ -5,7 +5,7 @@ plt.rcParams["figure.constrained_layout.use"] = True
 
 
 def show_images(images: list, names: list[str], show: bool = True,
-                suptitle: str | None = None, **fig_kw):
+                suptitle: str = None, **fig_kw):
     """Muestra una lista de imágenes."""
     n_images = len(images)
     n_cols = int(np.ceil(np.sqrt(n_images)))
