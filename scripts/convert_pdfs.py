@@ -1,39 +1,38 @@
-import fitz # pip install PyMuPDF
+import fitz
 import os
 
 def pdf_to_image(pdfs_dir, images_dir, format="png", quality=2):
-    """ 
-    Convertir PDFs a imagenes
+    os.makedirs(images_dir, exist_ok=True)
 
-    Args:
-        pdfs_dir (str): Carpeta de PDFs
-        images_dir (str): Carpeta de imagenes
-        format (str, optional): Formato de la imagen. Defaults to "png".
-        quality (int, optional): Calidad de la imagen. Defaults to 2.
-    """
-    for file in os.listdir(pdfs_dir):    # leer archivos en la carpeta
-        if file.lower().endswith(".pdf"):    # si es pdf
+    for file in os.listdir(pdfs_dir):
+        if file.lower().endswith(".pdf"):
             pdf_file = os.path.join(pdfs_dir, file)
-            
-            doc = fitz.open(pdf_file)    # abrir el pdf
-            page = doc.load_page(0) # suponemos una unica pagina
+
+            doc = fitz.open(pdf_file)
+            page = doc.load_page(0)
             pix = page.get_pixmap(matrix=fitz.Matrix(quality, quality))
-            
-            output_name = f"{os.path.splitext(file)[0]}.{format}"
+
+            base_name = os.path.splitext(file)[0]
+            output_name = f"{base_name}.{format}"
             output_path = os.path.join(images_dir, output_name)
 
             temp = 1
             while os.path.exists(output_path):
-                output_name = f"{os.path.splitext(file)[0]}({temp}).{format}"
+                output_name = f"{base_name}({temp}).{format}"
                 output_path = os.path.join(images_dir, output_name)
                 temp += 1
 
-           
             pix.save(output_path)
             doc.close()
 
             print(f"{file} -> image")
 
+
 if __name__ == "__main__":
-    for batch_dir in os.listdir("../data/raw/"):
-        pdf_to_image(batch_dir, "../data/processed/png-images/")
+    raw_root = "./data/raw/"
+    output_dir = "./data/processed/png-images/"
+
+    for batch_dir in os.listdir(raw_root):
+        batch_path = os.path.join(raw_root, batch_dir)
+        if os.path.isdir(batch_path):
+            pdf_to_image(batch_path, output_dir)
