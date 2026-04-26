@@ -75,8 +75,8 @@ def align(images:list[np.ndarray], lines_points:\
     return aligned_images
 
 
-def transform(images:list[np.ndarray], names:list[str] | None = None,
-              saving_dir: str | None = None) -> list[np.ndarray]:
+def transform(images:list[np.ndarray], names:list[str] = None,
+              saving_dir: str = None) -> list[np.ndarray]:
     """  """
 
     lines_points = [ select_rotation_line(img, draw_line=(saving_dir is None))\
@@ -94,14 +94,14 @@ if __name__ == "__main__":
     from src.load_images import read_images
     from src.visualitation import show_images
 
-    for_saving = False
+    for_saving = True
 
     # leer imagenes
     images, names = read_images(PROCESSED_IMAGES_DIR + "png-images/", IMAGE_SIZE)
 
     # alinear imagenes
-    param_names, saving_dir = names, PROCESSED_IMAGES_DIR + "aligned-images/"\
-        if for_saving else None, None
+    param_names, saving_dir = (names, PROCESSED_IMAGES_DIR + "aligned-images/")\
+        if for_saving else (None, None)
     aligned_images = transform(images, names=param_names, saving_dir=saving_dir)
     
     # mostrar imagenes
