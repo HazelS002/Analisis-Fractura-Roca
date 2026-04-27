@@ -173,8 +173,11 @@ def fft_analysis(image, use_log=True, threshold_rel=0.3, min_distance=5):
 if __name__ == "__main__":
     from src.load_images import read_images
     from src import PROCESSED_IMAGES_DIR
+    from src.transform import clean_images
+    from src.utils import get_stage_images
 
     images, names = read_images(PROCESSED_IMAGES_DIR + "aligned-images/")
+    images = get_stage_images(clean_images(images), "cleaned")
 
     for img in images[:10]:
         fft_analysis(img, use_log=True, threshold_rel=0.4, min_distance=1)
