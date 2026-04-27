@@ -19,7 +19,7 @@ def create_data(original_images) -> tuple[list[np.ndarray], list[int]]:
     images = get_stage_images(clean_images(original_images), "cleaned")
     
     # crear imagenes aleatorias
-    fake_images = create_random_images(TRANSFORMATION_MARGIN, len(images), 0.2)
+    fake_images = create_random_images(TRANSFORMATION_MARGIN, len(images), 0.05)
 
     # concatenar y etiquetar imagenes
     all_images = images + fake_images
