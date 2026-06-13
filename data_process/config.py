@@ -18,4 +18,10 @@ circle_kwargs = {    # para marcador visual
     "thickness": cv2.FILLED
 }
 
+line_kwargs = {
+    "color": (0, 255, 0),
+    "thickness": 5,
+    "lineType": cv2.LINE_AA
+}
+
 ################################################################################

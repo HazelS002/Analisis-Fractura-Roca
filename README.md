@@ -38,8 +38,6 @@ conda activate imagen-denoising
 #### Dependencias principales
 - **OpenCV**: Procesamiento de imágenes y filtros de denoising
 - **scikit-image**: Algoritmos avanzados de eliminación de ruido
-- **PyTorch**: Redes neuronales para denoising profundo
-- **TensorFlow**: Alternativa para modelos de machine learning
 - **NumPy**: Cálculos numéricos y operaciones con arrays de imágenes
 - **Matplotlib**: Visualización de resultados antes/después
 <!-- - **Pillow**: Manipulación básica de formatos de imagen -->
@@ -49,10 +47,8 @@ conda activate imagen-denoising
 - **seaborn**: Estilos mejorados para visualización
 - **scikit-learn**: Utilidades de preprocesamiento y métricas
 - **imageio**: Lectura/escritura de múltiples formatos de imagen
-<!-- - **torchvision**: Modelos preentrenados y datasets para PyTorch -->
 
 #### Otras dependencias
-<!-- - **pandas**: Análisis de métricas de calidad (PSNR, SSIM) -->
 - **PyMuPDF**: Conversión de PDF a PNG (si se necesita procesar documentos)
 
 

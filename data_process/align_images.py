@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 from .utils.helpers import save_images
-from .config import angle, wa_kwargs, circle_kwargs
+from .config import angle, wa_kwargs, circle_kwargs, line_kwargs
 
 
 ################################################################################
@@ -20,8 +20,7 @@ def _select_rotation_line(image: np.ndarray, draw_line:bool=True)\
             points.append([x, y])
             
             if len(points) == 2:    # cuando se han seleccionado dos puntos
-                cv2.line(img, tuple(points[0]), tuple(points[1]),
-                         (0, 255, 0), 2)
+                cv2.line(img, tuple(points[0]), tuple(points[1]), **line_kwargs)
             
             cv2.circle(img, (x, y), **circle_kwargs)    # marcar punto
             cv2.imshow("image", img)    # actualizar imagen
