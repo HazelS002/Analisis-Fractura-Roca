@@ -1,6 +1,9 @@
 import os
 import numpy as np
 import cv2
+from typing import Tuple
+
+from ..config import wa_kwargs
 
 
 def get_imagesstage(results:list[dict], stage:str) -> list[np.ndarray]:
@@ -62,3 +65,31 @@ def read_images(dir:str, image_size=None, format="png")\
                 raise ValueError(f"Error al leer la imagen: {file}")
             
     return images, names
+
+
+
+def _apply_rigid_transform(img: np.ndarray, angle: float, dx: float, dy: float,
+                          center: Tuple[int, int] = None) -> np.ndarray:
+    """
+    Aplica rotación (alrededor del centro) y traslación a una imagen.
+    
+    Parámetros:
+        img: imagen de entrada (uint8 o float32, 2D o 3D).
+        angle: ángulo de rotación en grados (sentido antihorario positivo).
+        dx, dy: desplazamiento en píxeles (puede ser subpíxel).
+        center: centro de rotación (por defecto el centro de la imagen).
+    
+    Retorna:
+        imagen transformada
+    """
+    h, w = img.shape
+    center = center if center is not None else (w//2, h//2)
+    
+    M_trans = cv2.getRotationMatrix2D(center, angle, 1.0)    # rotacion
+    M_trans[0, 2] += dx; M_trans[1, 2] += dy                 # traslacion 
+    
+    # Aplicar transformación afín
+    transformed = cv2.warpAffine(img, M_trans, **wa_kwargs)
+    return transformed
+
+if __name__ == "__main__": pass

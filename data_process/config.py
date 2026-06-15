@@ -7,7 +7,7 @@ import cv2
 angle = 90    # angulo al que se ajustan las lineas marcadas
 
 wa_kwargs = {    # warpAffine kwargs (para aplicar matriz de rotacion)
-    "dsize": (400, 400),                   # tamaño de imagenes de salida
+    "dsize": (4000, 3000),                # tamaño de imagenes de salida
     "borderMode": cv2.BORDER_CONSTANT,
     "borderValue": 255
 }
@@ -23,6 +23,22 @@ line_kwargs = {
     "thickness": 5,
     "lineType": cv2.LINE_AA
 }
+################################################################################
+
+
+################################################################################
+#          Auto aligner  (iterative_average_alignment with logpolar)           #
+################################################################################
+
+wp_kwargs = {
+    "dsize": (0, 0),
+    "flags": cv2.WARP_POLAR_LOG + cv2.WARP_FILL_OUTLIERS
+}
+
+iterative_average_alignment_tol = 1e-4
+
+min_angle_response = 0.3
+min_desp_response = 0.3
 ################################################################################
 
 
