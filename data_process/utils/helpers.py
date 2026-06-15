@@ -67,7 +67,6 @@ def read_images(dir:str, image_size=None, format="png")\
     return images, names
 
 
-
 def _apply_rigid_transform(img: np.ndarray, angle: float, dx: float, dy: float,
                           center: Tuple[int, int] = None) -> np.ndarray:
     """
@@ -81,6 +80,8 @@ def _apply_rigid_transform(img: np.ndarray, angle: float, dx: float, dy: float,
     
     Retorna:
         imagen transformada
+
+    Warnning: Primero rota la imagen en el centro dado y despues la traslada
     """
     h, w = img.shape
     center = center if center is not None else (w//2, h//2)
@@ -91,5 +92,6 @@ def _apply_rigid_transform(img: np.ndarray, angle: float, dx: float, dy: float,
     # Aplicar transformación afín
     transformed = cv2.warpAffine(img, M_trans, **wa_kwargs)
     return transformed
+
 
 if __name__ == "__main__": pass

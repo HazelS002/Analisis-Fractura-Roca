@@ -7,7 +7,7 @@ import cv2
 angle = 90    # angulo al que se ajustan las lineas marcadas
 
 wa_kwargs = {    # warpAffine kwargs (para aplicar matriz de rotacion)
-    "dsize": (4000, 3000),                # tamaño de imagenes de salida
+    "dsize": (2700, 3700),                # tamaño de imagenes de salida
     "borderMode": cv2.BORDER_CONSTANT,
     "borderValue": 255
 }

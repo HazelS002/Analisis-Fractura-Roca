@@ -41,17 +41,16 @@ def _select_rotation_line(image: np.ndarray, draw_line:bool=True)\
 def _align(images:list[np.ndarray], lines_points:\
            list[list[int, int], list[int, int]]) -> list[np.ndarray]:
 
-    global_center = wa_kwargs["dsize"][0]//2, wa_kwargs["dsize"][1]//2
+    global_center = (wa_kwargs["dsize"][0])//2, (wa_kwargs["dsize"][1])//2
     
     aligned_images = []
     for img, points in zip(images, lines_points):
         center, p2 = points
-        rotation_angle = angle + np.arctan2(p2[1] - center[1], p2[0]\
-                                            - center[0])*180/np.pi
+        rotation_angle = angle -180 - np.arctan2(p2[1] - center[1], p2[0] - center[0])*180/np.pi
 
         dx, dy = global_center[0] - center[0], global_center[1] - center[1]
         aligned_image = _apply_rigid_transform(img, rotation_angle, dx, dy,
-                                               global_center)
+                                               center)
         
         aligned_images.append(aligned_image)
 
