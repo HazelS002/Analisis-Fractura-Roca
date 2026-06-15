@@ -23,5 +23,32 @@ line_kwargs = {
     "thickness": 5,
     "lineType": cv2.LINE_AA
 }
+################################################################################
 
+
+################################################################################
+#                                clean images                                  # 
+################################################################################
+
+# para eliminar areas pequeñas
+cc_kwargs = {    # connectedComponentsWithStats
+    "connectivity": 4    # 4 o 8
+}
+
+min_area=800
+
+clahe_kwargs = {    # para aplicar contraste
+    "clipLimit": 7.0,
+    "tileGridSize": (24, 24)
+}
+
+mb_kwargs = {    # para aplicar medianBlur
+    "ksize": 7
+}
+
+thresh_kwargs = {    # para aplicar threshholding
+    "thresh": 150,
+    "maxval": 255,
+    "type": cv2.THRESH_BINARY
+}
 ################################################################################

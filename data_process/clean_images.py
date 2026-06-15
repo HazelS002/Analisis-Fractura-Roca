@@ -1,62 +1,68 @@
 import cv2 as cv2
 import numpy as np
-from src import TRANSFORMATION_MARGIN
-from src.load_images import save_images
-import cv2
-import numpy as np
-from skimage.restoration import denoise_wavelet, estimate_sigma
-from skimage import img_as_float, img_as_ubyte
 
-def _del_area(binaria, area_max=60, conectividad=4):
-    # Asegurar formato uint8 (0 y 255)
-    if binaria.dtype == bool:
-        img = (binaria.astype(np.uint8)) * 255
+from .config import min_area, cc_kwargs, clahe_kwargs, mb_kwargs, thresh_kwargs
+
+
+def _remove_small_areas(binary_img, min_area):
+    """
+    Elimina componentes blancos pequeños de una imagen binaria.
+    
+    Parámetros:
+        binary_img: imagen binaria (dtype=bool o uint8, 0 y 255)
+        min_area: área mínima para conservar un componente blanco
+        connectivity: 4 u 8
+    Retorna:
+        imagen binaria del mismo tipo que la entrada
+    """
+    # Convertir a uint8 (0 y 255) si es necesario
+    if binary_img.dtype == bool:
+        img = binary_img.astype(np.uint8) * 255
     else:
-        img = binaria.copy()
-        if img.max() == 1:
-            img = img * 255
+        img = binary_img.copy()
+        if img.max() == 1: img = img * 255
     
+    # Etiquetar componentes blancos (sin invertir)
+    num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(\
+        img, **cc_kwargs)
     
-    # Encontrar componentes blancas en la invertida (que eran negras en original)
-    num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(
-        cv2.bitwise_not(img), connectivity=conectividad)
-    
-    # Máscara donde se conservarán las regiones negras que queremos mantener (las grandes)
-    mascara_negra_conservadas = np.zeros_like(img)
-    
-    # Omitir fondo (label 0)
+    result = np.zeros_like(img)    # mascara de areas grandes
     for i in range(1, num_labels):
-        area = stats[i, cv2.CC_STAT_AREA]
-        if area >= area_max:
-            # Esta región negra original es lo suficientemente grande, la conservamos
-            mascara_negra_conservadas[labels == i] = 255
+        # si el area es grande se cambia blanco
+        if stats[i, cv2.CC_STAT_AREA] >= min_area: result[labels == i] = 255    
     
-    
-    resultado = np.full_like(img, 255)  # fondo blanco
-    resultado[mascara_negra_conservadas == 255] = 0  # poner negro donde había regiones negras grandes
-    
-    # Devolver en el mismo tipo de dato de entrada
-    return resultado if binaria.dtype != bool else resultado > 0
+    # Devolver en el mismo tipo que la entrada
+    if binary_img.dtype == bool: return result.astype(bool)
+    elif binary_img.max() == 1: return result // 255
+    else: return result
 
-def clean_images(images: list[np.ndarray]) -> list[dict]:
+
+def _apply_filters(images: list[np.ndarray]) -> list[np.ndarray]:
     results = []
-    clahe = cv2.createCLAHE(clipLimit=7.0, tileGridSize=(24, 24))
+    clahe = cv2.createCLAHE(**clahe_kwargs)
 
-    for img in images:
+    for img in images.copy():
         if img.dtype != np.uint8:
-            img = cv2.normalize(img, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
-
-        result_dict = {"original": img.copy()}
+            img = cv2.normalize(img, None, 0, 255, cv2.NORM_MINMAX)\
+                .astype(np.uint8)
 
         # Mediana
-        median_img = img
-        for _ in range(8):
-            median_img = cv2.medianBlur(median_img, 3)
-            median_clahe = clahe.apply(median_img)
-            _, median_thresh = cv2.threshold(median_clahe, 150, 255, cv2.THRESH_BINARY)
-        result_dict["cleaned"] = _del_area(median_thresh, area_max=90, conectividad=4)
+        median_img = cv2.medianBlur(img, **mb_kwargs)
+        median_clahe = clahe.apply(median_img)
+        _, median_thresh = cv2.threshold(median_clahe, **thresh_kwargs)
+        without_smallareas = _remove_small_areas(median_thresh, min_area)
 
-
-        results.append(result_dict)
+        results.append(without_smallareas)
 
     return results
+
+
+def clean(images: list[np.ndarray], repeat_filters: int = 1)\
+    -> list[np.ndarray]:
+    results = images
+    for _ in range(repeat_filters): results = _apply_filters(results)
+
+    return results
+
+
+if __name__ == "__main__": pass
