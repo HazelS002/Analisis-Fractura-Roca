@@ -6,9 +6,6 @@ from typing import Tuple
 from ..config import wa_kwargs
 
 
-def get_imagesstage(results:list[dict], stage:str) -> list[np.ndarray]:
-    return [result[stage] for result in results]
-
 
 def get_lastest(images_dir, format="png") -> int:
     """ Recibe directorio con puras imagenes nombradas por numero y
