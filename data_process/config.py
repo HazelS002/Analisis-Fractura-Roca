@@ -37,8 +37,8 @@ wp_kwargs = {
 
 iterative_average_alignment_tol = 1e-4
 
-min_angle_response = 0.3
-min_desp_response = 0.3
+min_angle_response = 0.1
+min_desp_response = 0.1
 ################################################################################
 
 

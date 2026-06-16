@@ -127,7 +127,7 @@ def iterative_average_alignment(images: List[np.ndarray], n_iter: int = 3)\
     apply_rigid_transform en utils"""
     
     images_float = [np.float32(img) for img in images]    # float para calculos
-    reference = np.median(images_float, axis=0), 0, 0, 0  # referencia inicial
+    reference = np.median(images_float, axis=0)           # referencia inicial
     aligned_batch = images_float          # imagenes alineadas de cada iter 
 
     print("Aligning images...")
@@ -137,24 +137,25 @@ def iterative_average_alignment(images: List[np.ndarray], n_iter: int = 3)\
         
         # Alinear cada imagen a la referencia actual
         for i, img in enumerate(aligned_batch):
-            angle, dx, dy, (angle_response, desp_response)\
-                = _estimate_logpolar_rigid_transform(img, reference)
+            angle, dx, dy, (angle_response, desp_response) =\
+                _estimate_logpolar_rigid_transform(img, reference)
 
-            if angle_response < min_angle_response and\
-                desp_response < min_desp_response:
-                angle, dx, dy = (angle, 0, 0) if\
-                    min_desp_response < min_angle_response else (0, dx, dy)
-                print("Max value response selected for transformation")
-            else:
-                angle = angle if min_angle_response <= angle_response else 0
-                dx, dy = (dx, dy) if min_desp_response <= desp_response\
-                    else (0, 0)
-            
+            use_angle = angle_response >= min_angle_response
+            use_desp = desp_response >= min_desp_response
+
+            angle = angle if use_angle else 0.0
+            dx = dx if use_desp else 0.0
+            dy = dy if use_desp else 0.0
+
             img_align = _apply_rigid_transform(img, angle, dx, dy)
             aligned_this_iter.append(img_align)
-            print(f"\t\tImage {i}: Angle={angle:.6f}, desp=({dx:.4f},{dy:.4f})")
-            print(f"\t\t\tAngle reponse:{angle_response:.6f}")
-            print(f"\t\t\tDesp reponse: {desp_response:.6f}")
+
+            print(f"\t\tImage {i}: Angle={angle:.6f}, desp=({dx:.6f},{dy:.6f})")
+            print(f"\t\t\tAngle response: {angle_response:.6f}")
+            print(f"\t\t\tDesp response:  {desp_response:.6f}")
+            if not use_angle: print("\t\t\t\tLow confidence for using angle")
+            if not use_desp: print("\t\t\t\tLow confidence for using desp")            
+
         
         new_reference = np.mean(aligned_this_iter, axis=0)    # nueva referencia
         
