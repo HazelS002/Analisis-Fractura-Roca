@@ -5,7 +5,7 @@ from visualize.images import show_images
 from .config import PROCESSED_IMAGES_DIR
 
 def main(iters):
-    images_dir = PROCESSED_IMAGES_DIR + "aligned-images/"
+    images_dir = PROCESSED_IMAGES_DIR + "binary-images/"
     images, names = read_images(images_dir)
 
     aligned_images, final_average = iterative_average_alignment(images, iters)
