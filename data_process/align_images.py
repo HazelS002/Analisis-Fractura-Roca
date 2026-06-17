@@ -3,8 +3,12 @@ import numpy as np
 from typing import List, Tuple
 
 from .utils.helpers import save_images, _apply_rigid_transform
-from .config import angle, wa_kwargs, circle_kwargs, line_kwargs, wp_kwargs,\
-    iterative_average_alignment_tol, min_angle_response, min_desp_response
+from .config import angle, global_center          # parametros para centrar
+from .config import circle_kwargs, line_kwargs    # parametros visuales
+
+from .config import min_angle_response, min_desp_response,\
+    iterative_average_alignment_tol
+from .config import wp_kwargs
 
 
 ################################################################################
@@ -40,17 +44,16 @@ def _select_rotation_line(image: np.ndarray, draw_line:bool=True)\
 
 def _align(images:list[np.ndarray], lines_points:\
            list[list[int, int], list[int, int]]) -> list[np.ndarray]:
-
-    global_center = (wa_kwargs["dsize"][0])//2, (wa_kwargs["dsize"][1])//2
     
     aligned_images = []
     for img, points in zip(images, lines_points):
         center, p2 = points
-        rotation_angle = angle -180 - np.arctan2(p2[1] - center[1], p2[0] - center[0])*180/np.pi
+        rotation_angle = angle\
+            -np.degrees(np.arctan2(center[1]-p2[1], p2[0]-center[0])) % 360
 
-        dx, dy = global_center[0] - center[0], global_center[1] - center[1]
-        aligned_image = _apply_rigid_transform(img, rotation_angle, dx, dy,
-                                               center)
+        dx, dy = global_center[0]-center[0], global_center[1]-center[1]
+        aligned_image =\
+            _apply_rigid_transform(img, rotation_angle, dx, dy, center)
         
         aligned_images.append(aligned_image)
 
@@ -90,7 +93,7 @@ def _estimate_logpolar_rigid_transform(img: np.ndarray, ref: np.ndarray)\
         responses: 
     """
     h, w = img.shape
-    center = (w // 2, h // 2)
+    center = global_center
     rho_max = int(round(np.hypot(w, h) / 2))
     img_f, ref_f = np.float32(img), np.float32(ref)    # float32 para FFT
     

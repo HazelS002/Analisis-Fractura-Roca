@@ -7,13 +7,15 @@ import cv2
 angle = 90    # angulo al que se ajustan las lineas marcadas
 
 wa_kwargs = {    # warpAffine kwargs (para aplicar matriz de rotacion)
-    "dsize": (2700, 3700),                # tamaño de imagenes de salida
+    "dsize": (2700, 2100),                # tamaño de imagenes de salida
     "borderMode": cv2.BORDER_CONSTANT,
     "borderValue": 255
 }
 
+global_center = (wa_kwargs["dsize"][0])//2, (wa_kwargs["dsize"][1])//2 + 200
+
 circle_kwargs = {    # para marcador visual
-    "radius": 3,
+    "radius": 10,
     "color": (0, 255, 0),
     "thickness": cv2.FILLED
 }
