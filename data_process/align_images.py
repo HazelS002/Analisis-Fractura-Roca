@@ -107,14 +107,13 @@ def _estimate_logpolar_rigid_transform(img: np.ndarray, ref: np.ndarray)\
     (shift_y, _), angle_response = cv2.phaseCorrelate(ref_polar, img_polar)
     
     # Convertir desplazamiento angular a grados
-    angle = (shift_y / w) * 360.0
-    
+    angle = (shift_y / img_polar.shape[1]) * 360.0    
+
     if angle > 180: angle -= 360    # Ajustar al rango -180..180
     elif angle < -180: angle += 360
         
     # Corregir rotación en img (Rotar img en su centro por -angle)
-    img_rot = _apply_rigid_transform(img_f, -angle, 0, 0)
-    ref_f = _apply_rigid_transform(ref_f, 0, 0, 0)
+    img_rot = _apply_rigid_transform(img_f, -angle, 0, 0, center=global_center)
     
     # Correlación de fase para traslación entre img_rot y ref
     (dx, dy), desp_respose = cv2.phaseCorrelate(ref_f, img_rot)
@@ -154,10 +153,11 @@ def iterative_average_alignment(images: List[np.ndarray], n_iter: int = 3)\
             aligned_this_iter.append(img_align)
 
             print(f"\t\tImage {i}: Angle={angle:.6f}, desp=({dx:.6f},{dy:.6f})")
-            print(f"\t\t\tAngle response: {angle_response:.6f}")
-            print(f"\t\t\tDesp response:  {desp_response:.6f}")
+            print(f"\t\t\tAngle response: {angle_response:.6f}", end="")
+            print(f"\tDesp response:  {desp_response:.6f}")
             if not use_angle: print("\t\t\t\tLow confidence for using angle")
             if not use_desp: print("\t\t\t\tLow confidence for using desp")            
+            print("")
 
         
         new_reference = np.mean(aligned_this_iter, axis=0)    # nueva referencia
