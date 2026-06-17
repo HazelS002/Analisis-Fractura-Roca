@@ -7,9 +7,11 @@ from .config import PROCESSED_IMAGES_DIR
 def main():
     data_dir = PROCESSED_IMAGES_DIR + "png-images/"
     images, names = read_images(data_dir)
-    manual_aligner(images, names, saving_dir=PROCESSED_IMAGES_DIR\
-                   + "aligned-images/")
+    # manual_aligner(images, names, saving_dir=PROCESSED_IMAGES_DIR\
+    #                + "aligned-images/")
     
+    manual_aligner(images, names, saving_dir=None)
+
     return
 
 
