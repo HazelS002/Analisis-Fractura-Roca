@@ -4,12 +4,12 @@ from .config import lr_kwargs, fakeimages_proportion,\
     noise_level, sample_weight
 
 
-
-def _create_random_images(shape: tuple[int, int], n_images: int,\
-                          noise_level:float) -> list[np.ndarray]:
-        
-    return [ (~(np.random.rand(*shape) < noise_level))\
-            .astype(np.uint8) * 255 for _ in range(n_images) ]
+def _create_random_images(shape: tuple[int, int], n_images: int,
+                          noise_level: float, random_state=42) -> list[np.ndarray]:
+    np.random.seed(random_state)
+    
+    return [np.random.normal(220, 300, size=shape).clip(0, 255)\
+            .astype(np.uint8) for _ in range(n_images)]
 
 
 def _create_data(images: list[np.ndarray], noise_level:float,
