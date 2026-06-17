@@ -44,3 +44,16 @@ def show_stages(results:list[dict], show:bool=True, cmap="gray"):
 
     if show: plt.show()
     return fig, axes
+
+
+def show_hist(images, names, suptitle):
+
+    fig, axes = plt.subplots(1, len(images), sharey=True)
+
+    for image, name, ax in zip(images, names, axes):
+        ax.hist(image.ravel(), bins=256, range=(0, 254), color='black')
+
+    fig.suptitle(suptitle)
+    plt.show()
+
+    return fig, axes

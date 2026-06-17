@@ -31,6 +31,22 @@ def save_images(images:list[np.ndarray], names:list[str], dir:str) -> None:
     return
 
 
+def read_sample(dir, sample_size, image_size=None, random_state=42):
+    np.random.seed(random_state)
+
+    lsdir = os.listdir(dir)
+    names = np.random.choice(lsdir, size=sample_size, replace=False)
+    images = [cv2.imread(os.path.join(dir, file), cv2.IMREAD_GRAYSCALE)\
+              for file in names]
+    
+    if image_size is not None:
+        images = [ cv2.resize(image, image_size, interpolation=cv2.INTER_AREA)\
+                  for image in images]
+        
+    return images, names
+
+
+
 def read_images(dir:str, image_size=None, format="png")\
     -> tuple[list[np.ndarray], list[str]]:
     """ Lee todas las imagenes en formato PNG de un directorio, las
