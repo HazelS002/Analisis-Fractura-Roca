@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
+import cv2
 
 
 def show_images(images: list, names: list[str], show: bool = True,
@@ -57,3 +58,41 @@ def show_hist(images, names, suptitle):
     plt.show()
 
     return fig, axes
+
+
+def animate_average(images, delay=500):
+    """
+    Muestra una animación del promedio acumulado de una lista de imágenes.
+
+    Parámetros:
+        images (list of numpy.ndarray): Lista de imágenes (mismo tamaño y tipo).
+        delay (int): Tiempo en milisegundos entre cada paso (por defecto 500).
+    """
+
+    # Inicializar el promedio con la primera imagen
+    avg = images[0].astype(np.float64)
+    current_frame = avg.astype(np.uint8)
+
+    cv2.namedWindow('Acumulated average', cv2.WINDOW_NORMAL)
+
+    # Mostrar la primera imagen
+    cv2.imshow('Acumulated average', current_frame)
+    if cv2.waitKey(delay) & 0xFF == ord('q'):
+        cv2.destroyAllWindows()
+        return
+
+    # Recorrer el resto de imágenes
+    for i, img in enumerate(images[1:], start=2):
+        # Actualizar promedio: avg = (avg * (i-1) + img) / i
+        avg = (avg * (i-1) + img.astype(np.float64)) / i
+        current_frame = avg.astype(np.uint8)
+
+        cv2.imshow('Promedio acumulado', current_frame)
+        key = cv2.waitKey(delay) & 0xFF
+        if key == ord('q'):
+            break
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+    return

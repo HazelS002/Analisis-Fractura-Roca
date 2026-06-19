@@ -1,5 +1,4 @@
 import numpy as np
-from .config import q
 
 def image_mean(images:list[np.ndarray]) -> np.ndarray:
     return np.mean(images, axis=0)
@@ -13,9 +12,8 @@ def image_std(images: list[np.ndarray]) -> np.ndarray:
     return np.std(images, axis=0)
 
 
-def image_percentile(images: list[np.ndarray]) -> np.ndarray:
+def image_percentile(images: list[np.ndarray], q=0.95) -> np.ndarray:
     return np.percentile(images, q=q, axis=0)
-
 
 
 if __name__ == "__main__": pass
