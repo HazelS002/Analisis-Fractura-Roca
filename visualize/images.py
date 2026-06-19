@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-import cv2
+from matplotlib.animation import FuncAnimation
 
 
 def show_images(images: list, names: list[str], show: bool = True,
@@ -60,39 +60,42 @@ def show_hist(images, names, suptitle):
     return fig, axes
 
 
-def animate_average(images, delay=500):
+def animate_average(images, delay=100):
     """
     Muestra una animación del promedio acumulado de una lista de imágenes.
 
     Parámetros:
         images (list of numpy.ndarray): Lista de imágenes (mismo tamaño y tipo).
-        delay (int): Tiempo en milisegundos entre cada paso (por defecto 500).
+        delay (int): Tiempo en milisegundos entre cada paso (por defecto 100).
     """
+    fig, ax = plt.subplots()
+    
+    avg = images[0].astype(np.float64)    # primera imagen como promedio inicial
+    im = ax.imshow(avg.astype(np.uint8), cmap='gray')
+    ax.set_title('Acumulated average (frame 1)')
 
-    # Inicializar el promedio con la primera imagen
-    avg = images[0].astype(np.float64)
-    current_frame = avg.astype(np.uint8)
+    def update(frame):
+        nonlocal avg
 
-    cv2.namedWindow('Acumulated average', cv2.WINDOW_NORMAL)
+        img = images[frame]    # actualizar promedio
+        avg = (avg * frame + img.astype(np.float64)) / (frame + 1)
+        
+        im.set_data(avg.astype(np.uint8))    # Actualizar imagen
+        ax.set_title(f'Acumulated average (frame {frame+1})')
+        return im,
 
-    # Mostrar la primera imagen
-    cv2.imshow('Acumulated average', current_frame)
-    if cv2.waitKey(delay) & 0xFF == ord('q'):
-        cv2.destroyAllWindows()
-        return
+    # Detener la animación si se pulsa 'q'
+    def on_key(event):
+        if event.key == 'q': anim.event_source.stop()
+    fig.canvas.mpl_connect('key_press_event', on_key)
 
-    # Recorrer el resto de imágenes
-    for i, img in enumerate(images[1:], start=2):
-        # Actualizar promedio: avg = (avg * (i-1) + img) / i
-        avg = (avg * (i-1) + img.astype(np.float64)) / i
-        current_frame = avg.astype(np.uint8)
+    # Crear la animación: frames desde 1 hasta el último índice
+    anim = FuncAnimation(
+        fig, update,
+        frames=range(1, len(images)),
+        interval=delay,
+        repeat=True,
+        blit=False  # False para actualizar el título sin problemas
+    )
 
-        cv2.imshow('Promedio acumulado', current_frame)
-        key = cv2.waitKey(delay) & 0xFF
-        if key == ord('q'):
-            break
-
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-    return
+    plt.show()

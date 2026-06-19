@@ -6,12 +6,13 @@ from .config import PROCESSED_IMAGES_DIR as images_dir
 
 def main():
     images, _ = read_images(images_dir + "aligned-images/")
+    q = .95
 
     animate_average(images)    # Mostrar animacion de promediado
 
     stats_images = [    # calcular estadisticas por pixeles
         image_mean(images), image_median(images),
-        image_std(images), image_percentile(images)
+        image_std(images), image_percentile(images, q)
     ]
     
     names = [    # Nombres de estadisticas
