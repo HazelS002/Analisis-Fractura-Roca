@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 
+from data_process.utils.helpers import _apply_rigid_transform
+
 def fit_ellipses(images: list):
     ellipses = []
     
@@ -41,3 +43,38 @@ def fit_ellipses(images: list):
             ellipses.append(ellipse)
 
     return ellipses
+
+def align_by_ellipses(images, ellipses):
+    """
+    Alinea cada imagen basándose en su elipse correspondiente.
+    
+    Para cada imagen (no se modifica la original) se aplica una transformación
+    rígida (rotación + traslación) tal que:
+      - El eje mayor de la elipse queda horizontal (ángulo 0°).
+      - El centro de la elipse se sitúa en el centro de la imagen resultante.
+    
+    Args:
+        images:   Lista de imágenes (rutas o arrays numpy).
+        ellipses: Lista de elipses en el mismo orden, cada una del formato
+                  ((cx, cy), (ancho, alto), angulo) devuelto por cv2.fitEllipse.
+                  Puede contener None si la selección se canceló.
+    
+    Returns:
+        Lista de imágenes alineadas (arrays numpy).
+    """
+    aligned_images = []
+    
+    for img, ellipse in zip(images, ellipses):
+        img = img.copy()
+
+        (cx, cy), (_, _), angle = ellipse # elipse devuelta por cv2.fitEllipse
+        h, w = img.shape[:2]
+
+        # Centro destino (mitad de la imagen)
+        target_cx, target_cy = w/2.0, h/2.0
+        aligned = _apply_rigid_transform(img, angle=-angle,
+                                         dx=target_cx-cx, dy=target_cy-cy,
+                                         center=(int(cx), int(cy)))
+        aligned_images.append(aligned)
+
+    return aligned_images
