@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 
+from .utils.helpers import _apply_rigid_transform
+
 def fit_ellipses(images: list, copy: bool = True):
     ellipses = []
     
@@ -47,12 +49,7 @@ def align_by_ellipses(images, ellipses):
     for img, ellipse in zip(images, ellipses):
         h, w = img.shape[:2]
         (cx, cy), _, ang = ellipse
-        
-        M = cv2.getRotationMatrix2D((cx, cy), -ang, 1.0)
-        M[0, 2] += (w/2 - cx)
-        M[1, 2] += (h/2 - cy)
-        
-        img_alin = cv2.warpAffine(img, M, (w, h), borderMode=cv2.BORDER_CONSTANT, borderValue=(0,0,0))
-        aligned_images.append(img_alin)
+        aligned_img = _apply_rigid_transform(img, ang-90, w/2-cx, h/2-cy, (cx, cy))
+        aligned_images.append(aligned_img)
     
     return aligned_images
