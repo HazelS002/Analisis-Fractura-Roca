@@ -2,7 +2,7 @@ from analysis.nmf import apply_nmf
 from data_process.utils import read_images
 from visualize.images import show_images
 
-from .config import PROCESSED_IMAGES_DIR as images_dir
+from ..config import PROCESSED_IMAGES_DIR as images_dir
 
 
 def main(components):

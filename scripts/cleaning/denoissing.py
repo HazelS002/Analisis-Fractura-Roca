@@ -2,7 +2,7 @@ from data_process.clean_images import denoise
 from data_process.utils import read_sample
 from visualize.images import show_images
 
-from .config import PROCESSED_IMAGES_DIR as images_dir
+from ..config import PROCESSED_IMAGES_DIR as images_dir
 
 def main():
     sample_size = 5

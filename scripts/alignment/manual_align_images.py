@@ -1,7 +1,7 @@
 from data_process.align_images import manual_aligner
 from data_process.utils import read_images
 
-from .config import PROCESSED_IMAGES_DIR
+from ..config import PROCESSED_IMAGES_DIR
 
 
 def main():

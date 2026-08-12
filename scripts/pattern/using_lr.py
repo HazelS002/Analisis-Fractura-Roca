@@ -2,7 +2,7 @@ from analysis.lr import apply_lr
 from data_process.utils import read_images
 from visualize.images import show_images
 
-from .config import PROCESSED_IMAGES_DIR
+from ..config import PROCESSED_IMAGES_DIR
 
 
 def main():

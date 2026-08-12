@@ -2,7 +2,7 @@ from data_process.align_images import iterative_average_alignment
 from data_process.utils import read_images, save_images
 from visualize.images import show_images
 
-from .config import PROCESSED_IMAGES_DIR
+from ..config import PROCESSED_IMAGES_DIR
 
 def main(iters):
     images_dir = PROCESSED_IMAGES_DIR + "aligned-images/"
