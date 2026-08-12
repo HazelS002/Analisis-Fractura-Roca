@@ -8,7 +8,7 @@ def main():
     images_dir = PROCESSED_IMAGES_DIR + "png-images/"
     images, names = read_sample(images_dir, 6)
 
-    ellipses = fit_ellipses(images)
+    ellipses = fit_ellipses(images, copy=False)
     aligned = align_by_ellipses(images, ellipses)
 
     show_images(aligned, names)

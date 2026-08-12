@@ -3,22 +3,20 @@ import numpy as np
 
 from data_process.utils.helpers import _apply_rigid_transform
 
-def fit_ellipses(images: list):
+def fit_ellipses(images: list, copy: bool = True):
     ellipses = []
     
     for idx, img in enumerate(images):
-        img = img.copy() # para no modificar la original
-        points = []      # actualizar puntos
-        
+        points = []      # actualizar puntos        
         wn = f"Select Points (img {idx+1})"    # nombre de la ventana
         cv2.namedWindow(wn, cv2.WINDOW_NORMAL)
-        display = img.copy()
+        display = img if not copy else img.copy()
         
         def click_event(event, x, y, flags, param):
             if event == cv2.EVENT_LBUTTONDOWN:
                 if len(points) < 5:
                     points.append([x, y])
-                    cv2.circle(display, (x, y), 3, (0, 255, 0), -1)
+                    cv2.circle(display, (x, y), 5, (0, 255, 0), -1)
                     cv2.imshow(wn, display)
         
         cv2.setMouseCallback(wn, click_event)
@@ -36,7 +34,7 @@ def fit_ellipses(images: list):
             ellipse = cv2.fitEllipse(pts)
             
             # Mostrar la elipse resultante brevemente
-            cv2.ellipse(display, ellipse, (0, 0, 255), 2)
+            cv2.ellipse(display, ellipse, (0, 0, 255), 5)
             cv2.imshow(wn, display)
             cv2.waitKey(0)  # Pulsa cualquier tecla para cerrar
             cv2.destroyWindow(wn)
