@@ -1,8 +1,6 @@
 import cv2
 import numpy as np
 
-from data_process.utils.helpers import _apply_rigid_transform
-
 def fit_ellipses(images: list, copy: bool = True):
     ellipses = []
     
@@ -34,45 +32,27 @@ def fit_ellipses(images: list, copy: bool = True):
             ellipse = cv2.fitEllipse(pts)
             
             # Mostrar la elipse resultante brevemente
-            cv2.ellipse(display, ellipse, (0, 0, 255), 5)
+            cv2.ellipse(display, ellipse, (0, 0, 255), 20)
             cv2.imshow(wn, display)
             cv2.waitKey(0)  # Pulsa cualquier tecla para cerrar
             cv2.destroyWindow(wn)
             ellipses.append(ellipse)
+            print(f"Center: {ellipse[0]},\tAxis: {ellipse[1]},\tAngle: {ellipse[2]}")
 
     return ellipses
 
 def align_by_ellipses(images, ellipses):
-    """
-    Alinea cada imagen basándose en su elipse correspondiente.
-    
-    Para cada imagen (no se modifica la original) se aplica una transformación
-    rígida (rotación + traslación) tal que:
-      - El eje mayor de la elipse queda horizontal (ángulo 0°).
-      - El centro de la elipse se sitúa en el centro de la imagen resultante.
-    
-    Args:
-        images:   Lista de imágenes (rutas o arrays numpy).
-        ellipses: Lista de elipses en el mismo orden, cada una del formato
-                  ((cx, cy), (ancho, alto), angulo) devuelto por cv2.fitEllipse.
-                  Puede contener None si la selección se canceló.
-    
-    Returns:
-        Lista de imágenes alineadas (arrays numpy).
-    """
     aligned_images = []
     
     for img, ellipse in zip(images, ellipses):
-        img = img.copy()
-
-        (cx, cy), (_, _), angle = ellipse # elipse devuelta por cv2.fitEllipse
         h, w = img.shape[:2]
-
-        # Centro destino (mitad de la imagen)
-        target_cx, target_cy = w/2.0, h/2.0
-        aligned = _apply_rigid_transform(img, angle=-angle,
-                                         dx=target_cx-cx, dy=target_cy-cy,
-                                         center=(int(cx), int(cy)))
-        aligned_images.append(aligned)
-
+        (cx, cy), _, ang = ellipse
+        
+        M = cv2.getRotationMatrix2D((cx, cy), -ang, 1.0)
+        M[0, 2] += (w/2 - cx)
+        M[1, 2] += (h/2 - cy)
+        
+        img_alin = cv2.warpAffine(img, M, (w, h), borderMode=cv2.BORDER_CONSTANT, borderValue=(0,0,0))
+        aligned_images.append(img_alin)
+    
     return aligned_images

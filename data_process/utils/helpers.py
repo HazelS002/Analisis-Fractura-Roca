@@ -96,7 +96,7 @@ def _apply_rigid_transform(img: np.ndarray, angle: float, dx: float, dy: float,
 
     Warnning: Primero rota la imagen en el centro dado y despues la traslada
     """
-    h, w = img.shape
+    h, w = img.shape[:2]
     center = center if center is not None else (w//2, h//2)
     
     M_trans = cv2.getRotationMatrix2D(center, angle, 1.0)    # rotacion
