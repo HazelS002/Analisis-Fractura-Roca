@@ -101,7 +101,6 @@ def animate_average(images, delay=100):
     plt.show()
 
 
-
 def animate_images(images, delay=100):
     """
     Muestra una animación del barrido de una lista de imágenes.
@@ -112,31 +111,20 @@ def animate_images(images, delay=100):
     """
     fig, ax = plt.subplots()
     
-    img = images[0].astype(np.uint8)    # primera imagen como promedio inicial
-    im = ax.imshow(img, cmap='gray')
+    # Mostrar el primer frame
+    im = ax.imshow(images[0].astype(np.uint8), cmap='gray')
     ax.set_title('(frame 1)')
 
     def update(frame):
-        nonlocal img
-
-        img = images[frame]
-        
-        im.set_data(img.astype(np.uint8))    # Actualizar imagen
-        ax.set_title(f'(frame {frame+1})')
+        im.set_data(images[frame].astype(np.uint8))
+        ax.set_title(f'frame {frame+1}')
         return im,
 
-    # Detener la animación si se pulsa 'q'
     def on_key(event):
         if event.key == 'q': anim.event_source.stop()
+
     fig.canvas.mpl_connect('key_press_event', on_key)
 
-    # Crear la animación: frames desde 1 hasta el último índice
-    anim = FuncAnimation(
-        fig, update,
-        frames=range(1, len(images)),
-        interval=delay,
-        repeat=True,
-        blit=False  # False para actualizar el título sin problemas
-    )
-
+    anim = FuncAnimation(fig, update, frames=range(1, len(images)),
+                         interval=delay, repeat=True, blit=False)
     plt.show()

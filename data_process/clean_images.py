@@ -1,10 +1,6 @@
 import cv2 as cv2
 import numpy as np
 
-# from scipy.ndimage import laplace, gaussian_filter
-# from fast_poisson_solver import poisson_2d
-
-
 from .config import min_area, cc_kwargs, clahe_kwargs, mb_kwargs, thresh_kwargs
 
 
@@ -67,18 +63,5 @@ def clean(images: list[np.ndarray], repeat_filters: int = 1)\
     for _ in range(repeat_filters): results = _apply_filters(results)
 
     return results
-
-# def denoise(images, sigma=1.0):
-#     """
-#     Elimina ruido suavizando el término fuente f = ∇²u.
-#     sigma controla la intensidad del suavizado (mayor = más denoising).
-#     """
-#     denoised_images = []
-#     for image in images:
-#         f = laplace(image.astype(np.float64))        # fuente de la imagen
-#         f_smooth = gaussian_filter(f, sigma)         # Suavizado de la fuente
-#         denoised_images.append(poisson_2d(f_smooth)) # fuente suavizada a imagen
-
-#     return denoised_images
 
 if __name__ == "__main__": pass
