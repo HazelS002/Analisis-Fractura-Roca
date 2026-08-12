@@ -15,14 +15,14 @@ wa_kwargs = {    # warpAffine kwargs (para aplicar matriz de rotacion)
 global_center = (wa_kwargs["dsize"][0])//2, (wa_kwargs["dsize"][1])//2 + 200
 
 circle_kwargs = {    # para marcador visual
-    "radius": 10,
+    "radius": 20,
     "color": (0, 255, 0),
     "thickness": cv2.FILLED
 }
 
 line_kwargs = {
     "color": (0, 255, 0),
-    "thickness": 5,
+    "thickness": 20,
     "lineType": cv2.LINE_AA
 }
 ################################################################################

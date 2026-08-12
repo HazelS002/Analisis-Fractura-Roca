@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 from .utils.helpers import _apply_rigid_transform
+from .config import circle_kwargs, line_kwargs
 
 def fit_ellipses(images: list, copy: bool = True):
     ellipses = []
@@ -16,7 +17,7 @@ def fit_ellipses(images: list, copy: bool = True):
             if event == cv2.EVENT_LBUTTONDOWN:
                 if len(points) < 5:
                     points.append([x, y])
-                    cv2.circle(display, (x, y), 5, (0, 255, 0), -1)
+                    cv2.circle(display, (x, y), **circle_kwargs)
                     cv2.imshow(wn, display)
         
         cv2.setMouseCallback(wn, click_event)
@@ -34,7 +35,7 @@ def fit_ellipses(images: list, copy: bool = True):
             ellipse = cv2.fitEllipse(pts)
             
             # Mostrar la elipse resultante brevemente
-            cv2.ellipse(display, ellipse, (0, 0, 255), 20)
+            cv2.ellipse(display, ellipse, **line_kwargs)
             cv2.imshow(wn, display)
             cv2.waitKey(0)  # Pulsa cualquier tecla para cerrar
             cv2.destroyWindow(wn)
