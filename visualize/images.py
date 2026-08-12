@@ -99,3 +99,44 @@ def animate_average(images, delay=100):
     )
 
     plt.show()
+
+
+
+def animate_images(images, delay=100):
+    """
+    Muestra una animación del barrido de una lista de imágenes.
+
+    Parámetros:
+        images (list of numpy.ndarray): Lista de imágenes (mismo tamaño y tipo).
+        delay (int): Tiempo en milisegundos entre cada paso (por defecto 100).
+    """
+    fig, ax = plt.subplots()
+    
+    img = images[0].astype(np.uint8)    # primera imagen como promedio inicial
+    im = ax.imshow(img, cmap='gray')
+    ax.set_title('(frame 1)')
+
+    def update(frame):
+        nonlocal img
+
+        img = images[frame]
+        
+        im.set_data(img.astype(np.uint8))    # Actualizar imagen
+        ax.set_title(f'(frame {frame+1})')
+        return im,
+
+    # Detener la animación si se pulsa 'q'
+    def on_key(event):
+        if event.key == 'q': anim.event_source.stop()
+    fig.canvas.mpl_connect('key_press_event', on_key)
+
+    # Crear la animación: frames desde 1 hasta el último índice
+    anim = FuncAnimation(
+        fig, update,
+        frames=range(1, len(images)),
+        interval=delay,
+        repeat=True,
+        blit=False  # False para actualizar el título sin problemas
+    )
+
+    plt.show()

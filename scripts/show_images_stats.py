@@ -1,14 +1,15 @@
 from analysis.stats import *
-from visualize.images import show_images, animate_average
+from visualize.images import show_images, animate_average, animate_images
 from data_process.utils import read_images
 
 from .config import PROCESSED_IMAGES_DIR as images_dir
 
 def main():
-    images, _ = read_images(images_dir + "aligned-images/")
+    images, _ = read_images(images_dir + "ellipses-aligned/")
     q = .95
 
-    animate_average(images)    # Mostrar animacion de promediado
+    animate_average(images, 20)    # Mostrar animacion de promediado
+    animate_images(images, 20)
 
     stats_images = [    # calcular estadisticas por pixeles
         image_mean(images), image_median(images),

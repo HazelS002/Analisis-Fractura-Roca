@@ -6,7 +6,7 @@ from .config import PROCESSED_IMAGES_DIR
 
 
 def main():
-    images, _ = read_images(PROCESSED_IMAGES_DIR + "aligned-images/")
+    images, _ = read_images(PROCESSED_IMAGES_DIR + "ellipses-aligned/")
     mask, _ = apply_lr(images, show_generated=True)
 
     show_images([mask], [""], suptitle="Mask of weights pixel's in LR")
