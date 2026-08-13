@@ -3,8 +3,10 @@ from .clean_images import clean
 from .utils.convert_pdfs import pdf_to_image
 from .utils.helpers import save_images, read_images, get_lastest
 from .ellipses import fit_ellipses, align_by_ellipses
+from .utils.helpers import flatten_images, reshape_images
+
 __all__ = [
     "iterative_average_alignment", "manual_aligner", "clean", "pdf_to_image",
     "save_images", "read_images", "get_lastest", "fit_ellipses",
-    "align_by_ellipses"
+    "align_by_ellipses", "flatten_images", "reshape_images"
 ]
