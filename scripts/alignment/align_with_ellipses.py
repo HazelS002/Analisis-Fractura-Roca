@@ -6,7 +6,7 @@ from ..config import PROCESSED_IMAGES_DIR
 def main():
     images_dir = PROCESSED_IMAGES_DIR + "png-images/"
     images, names = read_images(images_dir)
-    ellipses = fit_ellipses(images, copy=True)
+    images, names, ellipses = fit_ellipses(images, names, copy=True)
     aligned = align_by_ellipses(images, ellipses)
     save_images(aligned, names, PROCESSED_IMAGES_DIR + "ellipses-aligned/")
 
