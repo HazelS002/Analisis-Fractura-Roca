@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 from .utils.helpers import _apply_rigid_transform
-from .config import circle_kwargs, line_kwargs
+from .config import circle_kwargs, line_kwargs, wa_kwargs
 
 
 def fit_ellipses(images: list, names: list, copy: bool = True):
@@ -64,9 +64,9 @@ def fit_ellipses(images: list, names: list, copy: bool = True):
 
 def align_by_ellipses(images, ellipses):
     aligned_images = []
+    w, h = wa_kwargs["dsize"] 
     
     for img, ellipse in zip(images, ellipses):
-        h, w = img.shape[:2]
         (cx, cy), _, ang = ellipse
         aligned_img = _apply_rigid_transform(img, ang-90, w/2-cx, h/2-cy, (cx, cy))
         aligned_images.append(aligned_img)
