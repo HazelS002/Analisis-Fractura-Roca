@@ -1,12 +1,15 @@
 from analysis.stats import *
 from visualize.images import show_images, animate_average, animate_images
+from visualize.graphs import plot_hists
 from data_process.utils import read_images
 
 from ..config import PROCESSED_IMAGES_DIR as images_dir
 
 def main():
-    images, _ = read_images(images_dir + "ellipses-aligned/")
+    images, names = read_images(images_dir + "ellipses-aligned/")
     q = .95
+
+    plot_hists(images, names)
 
     animate_average(images, 20)    # Mostrar animacion de promediado
     animate_images(images, 20)

@@ -53,4 +53,29 @@ def plot_pca(X_pca, pca, scaler, shape, names):
 
     return
 
+
+def plot_hists(images, names):
+    # calcular dimension de malla de imagenes
+    n_images = len(images)
+    n_cols = int(np.ceil(np.sqrt(n_images)))
+    n_rows = int(np.ceil(n_images / n_cols))
+    
+    fig, axes = plt.subplots(nrows=n_rows,ncols=n_cols,\
+        squeeze=False, sharex=True, sharey=True)
+    
+    for i, (img, name) in enumerate(zip(images, names)):
+        r, c = i // n_cols, i % n_cols
+        ax = axes[r, c]
+
+        ax.bar(range(256), np.bincount(img.ravel(), minlength=256), width=1)
+        ax.set_title(name)
+    
+    for j in range(i + 1, n_cols * n_rows):    # Apagar ejes vacíos
+        r, c = j // n_cols, j % n_cols
+        axes[r, c].axis("off")
+
+    plt.show()
+    return fig, axes
+
+
 if __name__ == "__main__": pass
