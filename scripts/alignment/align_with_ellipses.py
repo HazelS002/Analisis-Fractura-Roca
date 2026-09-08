@@ -9,9 +9,11 @@ def main():
     images, names = read_images(images_dir)
     images, names, ellipses = fit_ellipses(images, names, copy=True)
     aligned = align_by_ellipses(images, ellipses)
-    [ os.remove(os.path.join(images_dir, file))\
-     for file in os.listdir(images_dir)]
-    save_images(aligned, names, PROCESSED_IMAGES_DIR + "ellipses-aligned/")
+
+    output_dir = PROCESSED_IMAGES_DIR + "aligned-images/"
+    [ os.remove(os.path.join(output_dir, file))\
+     for file in os.listdir(output_dir)]
+    save_images(aligned, names, output_dir)
 
 if __name__ == "__main__":
     main()
