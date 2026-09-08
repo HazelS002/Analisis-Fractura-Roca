@@ -6,7 +6,7 @@ from data_process.utils import read_images
 from ..config import PROCESSED_IMAGES_DIR as images_dir
 
 def main():
-    images, names = read_images(images_dir + "ellipses-aligned/")
+    images, names = read_images(images_dir + "aligned-images/")
     q = .95
 
     plot_hists(images, names)
