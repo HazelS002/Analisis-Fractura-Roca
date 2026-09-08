@@ -64,9 +64,9 @@ def read_images(dir:str, image_size=None, format="png")\
             if image_size is not None:    # redimencionar imagen
                 print(f"\tOriginal shape:\t{image.shape}")
                 image = cv2.resize(image, image_size, interpolation=cv2.INTER_AREA)
-                print(f"\tNew shape:\t{image.shape}\n")
+                print(f"\tNew shape:\t{image.shape}")
             else:
-                print(f"\tShape:\t{image.shape}\n")
+                print(f"\tShape:\t{image.shape}")
 
             # nomalizar imagen
             image = cv2.normalize(image, None, 0, 255, cv2.NORM_MINMAX)\
