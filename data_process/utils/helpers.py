@@ -59,7 +59,7 @@ def read_images(dir:str, image_size=None, format="png")\
         if file.lower().endswith(f".{format}"):    # si es imagen
             # Leer imagen en blanco y negro
             image = cv2.imread(os.path.join(dir, file), cv2.IMREAD_GRAYSCALE)
-            print(f"Read image: {file}")
+            print(f"Read image: {file}", end="")
 
             if image_size is not None:    # redimencionar imagen
                 print(f"\tOriginal shape:\t{image.shape}")
