@@ -46,6 +46,14 @@ def read_sample(dir, sample_size, image_size=None, random_state=42):
     return images, names
 
 
+def select_sample(images, names, sample_size, random_state=42):
+    np.random.seed(random_state)
+
+    index = np.random.choice(range(len(images)), size=sample_size,\
+                             replace=False)
+
+    return [images[i] for i in index], [names[i] for i in index]
+
 
 def read_images(dir:str, image_size=None, format="png")\
     -> tuple[list[np.ndarray], list[str]]:
