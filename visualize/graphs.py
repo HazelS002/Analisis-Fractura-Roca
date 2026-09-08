@@ -66,8 +66,8 @@ def plot_hists(images, names):
     for i, (img, name) in enumerate(zip(images, names)):
         r, c = i // n_cols, i % n_cols
         ax = axes[r, c]
-
-        ax.bar(range(256), np.bincount(img.ravel(), minlength=256), width=1)
+        ax.bar(range(254), np.bincount(img.ravel(), minlength=256)[:254],
+               width=1)
         ax.set_title(name)
     
     for j in range(i + 1, n_cols * n_rows):    # Apagar ejes vacíos
