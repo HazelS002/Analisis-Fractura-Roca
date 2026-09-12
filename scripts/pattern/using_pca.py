@@ -7,7 +7,7 @@ from visualize.graphs import plot_pca
 from ..config import PROCESSED_IMAGES_DIR as images_dir
 
 def main():
-    images, names = read_images(images_dir + "ellipses-aligned/") # cargar imgs
+    images, names = read_images(images_dir + "aligned-images/") # cargar imgs
     scaler, pca, X_pca = solve(images)    # aplicar pca
 
     plot_pca(X_pca, pca, scaler, images[0].shape, names)
