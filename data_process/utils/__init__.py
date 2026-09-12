@@ -1,9 +1,9 @@
-from .convert_pdfs import pdf_to_image
-from .helpers import get_lastest, read_images,\
-    save_images, read_sample, select_sample
+from . import convert_pdfs, helpers
 
+from .helpers import read_sample, read_images, reshape_images, save_images,\
+    flatten_images, select_sample, get_lastest
 
 __all__ = [
-    "pdf_to_image", "get_lastest", "read_images", "save_images", "read_sample",
-    "select_sample"
+    "convert_pdfs", "helpers", "read_sample", "read_images", "reshape_images",
+    "save_images", "flatten_images", "select_sample", "get_lastest"
 ]

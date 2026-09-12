@@ -48,25 +48,26 @@ min_desp_response = 0.10
 #                                clean images                                  # 
 ################################################################################
 
-# para eliminar areas pequeñas
-cc_kwargs = {    # connectedComponentsWithStats
-    "connectivity": 4    # 4 o 8
+ksize_medianB = 13    # (or None)
+
+
+canny_kwargs = {
+    # para dilate
+    "dilate_kernel": None,
+    "iterations": None,
+
+    # para canny
+    "threshold1": 250,
+    "threshold2": 300,
+    "apertureSize": 7,
+    "L2gradient": False
 }
 
-min_area=800
-
-clahe_kwargs = {    # para aplicar contraste
-    "clipLimit": 7.0,
-    "tileGridSize": (24, 24)
+blur_kwargs = {
+    "ksize": (0, 0),
+    "sigmaX": 60,
+    "sigmaY": 60,
+    "borderType": cv2.BORDER_DEFAULT
 }
 
-mb_kwargs = {    # para aplicar medianBlur
-    "ksize": 7
-}
-
-thresh_kwargs = {    # para aplicar threshholding
-    "thresh": 150,
-    "maxval": 255,
-    "type": cv2.THRESH_BINARY
-}
 ################################################################################
