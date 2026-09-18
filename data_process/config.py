@@ -48,7 +48,7 @@ min_desp_response = 0.10
 #                                clean images                                  # 
 ################################################################################
 
-ksize_medianB = 13    # (or None)
+ksize_medianB = 33    # (or None)
 
 
 canny_kwargs = {
@@ -57,8 +57,8 @@ canny_kwargs = {
     "iterations": None,
 
     # para canny
-    "threshold1": 250,
-    "threshold2": 300,
+    "threshold1": 10,
+    "threshold2": 200,
     "apertureSize": 7,
     "L2gradient": False
 }

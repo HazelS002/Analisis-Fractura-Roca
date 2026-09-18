@@ -36,7 +36,7 @@ def _apply(image, copy):
 
     # aqui se elije que aplicar
     # img = _blur(img)
-    img = _apply_canny(img, **canny_kwargs)
+    # img = _apply_canny(img, **canny_kwargs)
 
     return img
 
