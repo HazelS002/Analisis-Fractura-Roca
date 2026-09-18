@@ -1,29 +1,41 @@
 import numpy as np
 from sklearn.linear_model import LogisticRegression
-from .config import lr_kwargs, fakeimages_proportion,\
-    noise_level, sample_weight
+
+from .config import lr_kwargs, rimages_weight, fimages_weight
 
 
 
-def _create_random_images(shape: tuple[int, int], n_images: int,
-                          noise_level: float, random_state=42) -> list[np.ndarray]:
-    np.random.seed(random_state)
-    
-    return [np.random.normal(220, 300, size=shape).clip(0, 255)\
-            .astype(np.uint8) for _ in range(n_images)]
+def _create_poisson_images(shape: tuple[int, int], n_images: int,
+                          lam: float, random_state=42) -> list[np.ndarray]:
+    """
+    Genera imágenes aleatorias cuyos píxeles siguen una Poisson(lam).
+
+    Recibe:
+        shape        : tuple[int, int]. Dimensiones (alto, ancho).
+        n_images     : int. Número de imágenes a generar.
+        lam          : float. Parámetro lambda de la Poisson.
+        random_state : int. Semilla.
+
+    Devuelve:
+        list[np.ndarray] con imágenes uint8 en [0, 255].
+    """
+    rng = np.random.default_rng(random_state)
+
+    return [
+        rng.poisson(lam=lam, size=shape).clip(0, 255).astype(np.uint8)
+        for _ in range(n_images)
+    ]
 
 
-def _create_data(images: list[np.ndarray], noise_level:float,
-                 fakeimages_proportion: float = 1.0)\
-                    -> tuple[list[np.ndarray], list[int]]:
+def create_data(images: list[np.ndarray], lam:float, shape, images_proportion:\
+                float = 1.0) -> tuple[list[np.ndarray], list[int]]:
     
     # crear imagenes aleatorias
-    n_fakeimages = int(np.round(fakeimages_proportion*len(images)))
-    fake_images = _create_random_images(images[0].shape, n_fakeimages,\
-                                        noise_level)
+    n_fakeimages = int(np.round(images_proportion*len(images)))
+    fake_images = _create_poisson_images(shape, n_fakeimages, lam)
 
     # concatenar y etiquetar imagenes
-    all_images = images + fake_images
+    all_images = images.copy() + fake_images
     labels = [1]*len(images) + [0]*n_fakeimages
 
     # permutar imagenes
@@ -31,30 +43,28 @@ def _create_data(images: list[np.ndarray], noise_level:float,
     all_images = [all_images[i] for i in perm]
     labels = [labels[i] for i in perm]
 
-    return all_images, labels
+    return np.array(all_images), np.array(labels)
 
 
-def apply_lr(images: list[np.ndarray], show_generated: bool=False):
-    images_shape = images[0].shape
+def _sample_weight(labels: np.ndarray):
+    return None if rimages_weight is None or fimages_weight is None else\
+        np.where(labels == 1, rimages_weight, fimages_weight)
 
-    print("Creating data...")
-    real_and_fake_images, targets =\
-        _create_data(images, noise_level, fakeimages_proportion)
 
-    if show_generated:
-        from visualize.images import show_images
-        show_images(real_and_fake_images, targets, suptitle="Generated DataSet")
+def get_mask(lr: LogisticRegression, images_shape) -> np.ndarray:
+    mask = np.array(lr.coef_).reshape(images_shape)
+    return mask
+
+
+def apply_lr(images: list[np.ndarray], labels: list):
 
     # aplanar imagenes para aplicar regresion logistica
-    flatten_images = [ img.flatten() for img in real_and_fake_images ]
+    flatten_images = [ img.flatten() for img in images ]
 
-    lr = LogisticRegression(**lr_kwargs); print("Applying LR...")
-    lr.fit(flatten_images, targets, sample_weight)
+    lr = LogisticRegression(**lr_kwargs)
+    lr.fit(flatten_images, labels, _sample_weight(labels))    
 
-    # calcular mascara de pesos
-    mask = np.array(lr.coef_).reshape(images_shape)
-
-    return mask, lr
+    return lr
 
 
 if __name__ == "__main__": pass

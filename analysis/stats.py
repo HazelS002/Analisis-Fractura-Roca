@@ -56,7 +56,7 @@ def estimate_params(images, a=0, b=255):
         n, p = _binomial_params(x, a, b)
         median = np.median(x)
         print(f"Poisson:  lamb - {lamb_hat:.5f}; Binomial: n - {n},", end=" ")
-        print(f"p - {p:.5f}; Median - {median}; Asymmetry {lamb_hat-median:.5f}")
+        print(f"p - {p:.5f}; Median - {median}; Asymmetry - {lamb_hat-median:.5f}")
 
         params.append((lamb_hat, n, p, median))
     

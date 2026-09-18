@@ -17,6 +17,5 @@ lr_kwargs = {         # paramestros ajustables de regresion logistica
     "verbose": True
 }
 
-noise_level = 0.05             # nivel de ruido en imagesnes falsas   
-fakeimages_proportion = 1.0    # clases equilibradas
-sample_weight = None           # para fit en LogisticRegression
+rimages_weight = None    # peso de imagenes reales
+fimages_weight = None    # peso de imagenes falsas
