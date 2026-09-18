@@ -1,6 +1,6 @@
 from analysis.pca import solve, reconstruct
-from analysis.pca.config import RECONSTRUCTION_COMPONENTS
-from data_process import read_images, reshape_images
+from analysis.config import RECONSTRUCTION_COMPONENTS
+from data_process.utils import read_images, reshape_images
 from visualize.images import show_images
 from visualize.graphs import plot_pca
 

@@ -4,6 +4,7 @@ from .config import lr_kwargs, fakeimages_proportion,\
     noise_level, sample_weight
 
 
+
 def _create_random_images(shape: tuple[int, int], n_images: int,
                           noise_level: float, random_state=42) -> list[np.ndarray]:
     np.random.seed(random_state)

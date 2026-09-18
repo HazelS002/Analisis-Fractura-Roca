@@ -1,17 +1,18 @@
-from analysis.lr import apply_lr
-from data_process.utils import read_images
-from visualize.images import show_images
-
-from ..config import PROCESSED_IMAGES_DIR
+from visualize.graphs import plot_hists
+from data_process.utils import read_images, read_sample
+from ..config import PROCESSED_IMAGES_DIR as images_dir
 
 
 def main():
-    images, _ = read_images(PROCESSED_IMAGES_DIR + "ellipses-aligned/")
-    mask, _ = apply_lr(images, show_generated=True)
+    # images, names = read_images(images_dir + "aligned-images/")
+    images, names = read_sample(images_dir + "aligned-images/", 9)
 
-    show_images([mask], [""], suptitle="Mask of weights pixel's in LR")
+    a, b = 120, 150
+    # a, b = 200, 240
+    plot_hists(images, names, a, b)
 
     return
+
 
 if __name__ == "__main__":
     main()
