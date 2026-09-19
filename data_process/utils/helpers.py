@@ -114,10 +114,19 @@ def _apply_rigid_transform(img: np.ndarray, angle: float, dx: float, dy: float,
     transformed = cv2.warpAffine(img, M_trans, **wa_kwargs)
     return transformed
 
+
 def flatten_images(images: list[np.ndarray]) -> np.ndarray:
     return np.array([np.array(img.copy()).flatten() for img in images])
 
+
 def reshape_images(images, new_size):
     return [np.resize(img, new_size) for img in images]
+
+
+def restrict(image, a, b):
+    x = np.asarray(image).ravel().astype(float)
+    x = x[(x >= a) & (x <= b)]
+    return x
+
 
 if __name__ == "__main__": pass

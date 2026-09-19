@@ -1,4 +1,5 @@
 import numpy as np
+from data_process.utils import restrict
 
 
 def image_mean(images:list[np.ndarray]) -> np.ndarray:
@@ -15,12 +16,6 @@ def image_std(images: list[np.ndarray]) -> np.ndarray:
 
 def image_percentile(images: list[np.ndarray], q=0.95) -> np.ndarray:
     return np.percentile(images, q=q, axis=0)
-
-
-def _restrict(image, a, b):
-    x = np.asarray(image).ravel().astype(float)
-    x = x[(x >= a) & (x <= b)]
-    return x
 
 
 def _poisson_params(x):
@@ -51,7 +46,7 @@ def estimate_params(images, a=0, b=255):
     params = []
 
     for img in images:
-        x = _restrict(img, a, b)
+        x = restrict(img, a, b)
         lamb_hat = _poisson_params(x)
         n, p = _binomial_params(x, a, b)
         median = np.median(x)
