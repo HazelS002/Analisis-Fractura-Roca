@@ -5,7 +5,10 @@ from analysis.stats import image_mean, image_median, image_std,\
 from data_process.utils import read_images, select_sample
 from data_process.clean_images import clean
 
+import joblib
+
 from ..config import PROCESSED_IMAGES_DIR as images_dir
+from ..config import MODELS_DIR as models_dir
 
 
 def main():
@@ -16,7 +19,9 @@ def main():
 
     # Analisis de frecuencias de pixeles
     sample = select_sample(images, names, sample_size=9)
-    plot_hists(*sample, a, b)    # parecen dos distribuciones
+    km = joblib.load(models_dir + "km_pixel_clustering.joblib")
+    plot_hists(*sample, km)
+    # plot_hists(*sample, a, b)    # parecen dos distribuciones
 
 
     images = clean(images, copy=False)    # limapiar imagenes
