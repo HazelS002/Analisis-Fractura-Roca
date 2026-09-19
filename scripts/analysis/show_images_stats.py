@@ -24,7 +24,7 @@ def main():
     # plot_hists(*sample, a, b)    # parecen dos distribuciones
 
 
-    images = clean(images, copy=False)    # limapiar imagenes
+    # images = clean(images, copy=False)    # limapiar imagenes
 
 
     # # Animaciones
@@ -32,15 +32,15 @@ def main():
     # animate_images(images, 20)     # Animación de barrido de imagenes
 
 
-    # Estadisticas pixel a pixel
-    stats = [
-        (image_mean(images),          "Average Images"),
-        (image_median(images),        "Median Images"),
-        (image_std(images),           "Std Images"),
-        (image_percentile(images, q), f"Percentile {q} Image"),
-    ]
+    # # Estadisticas pixel a pixel
+    # stats = [
+    #     (image_mean(images),          "Average Images"),
+    #     (image_median(images),        "Median Images"),
+    #     (image_std(images),           "Std Images"),
+    #     (image_percentile(images, q), f"Percentile {q} Image"),
+    # ]
 
-    show_images(*zip(*stats), suptitle="Images Stats")    # mostrar
+    # show_images(*zip(*stats), suptitle="Images Stats")    # mostrar
 
     return
 

@@ -146,7 +146,7 @@ def plot_hists(images, names, km):
         # Etiquetas (reordenadas) para esta imagen
         labels = remap[km.predict(flat.reshape(-1, 1))]
 
-        for k, lam in enumerate(centers[:3]):
+        for k, lam in enumerate(centers):
             mask = labels == k
             if not mask.any(): continue
 

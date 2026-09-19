@@ -28,10 +28,10 @@ fimages_weight = None    # peso de imagenes falsas
 
 # KM params
 
-init_centroids = np.array([[68.0], [136.0], [220.0], [241.0]])
+init_centroids = np.array([[150.0], [220.0]])
 
 km_kwargs = {
-    "n_clusters": 4,
+    "n_clusters": 2,
     "init": init_centroids, # MatrixLike | ((...) -> Any) | ['k-means++', 'random']
     "n_init": 1,
     "max_iter": 30,
