@@ -6,6 +6,7 @@ from scipy.stats import poisson, binom
 from analysis.config import RECONSTRUCTION_COMPONENTS
 from analysis.pca import reconstruct
 from analysis.stats import estimate_params
+from analysis.clustering import cluster
 
 from visualize.images import show_images
 from data_process.utils.helpers import reshape_images
@@ -107,8 +108,6 @@ def plot_pca(X_pca, pca, scaler, shape, names):
 #     return fig, axes, params
 
 
-
-
 def plot_hists(images, names, km):
     """
     Grafica el histograma de píxeles de cada imagen coloreado por cluster,
@@ -126,38 +125,28 @@ def plot_hists(images, names, km):
     fig, axes = plt.subplots(nrows=n_rows, ncols=n_cols, squeeze=False,
                              sharex=True, sharey=True)
 
-    # Centroides ordenados (de menor a mayor valor de píxel)
-    centers = np.sort(km.cluster_centers_.ravel())
-    n_clusters = len(centers)
+    # Etiquetas para todas las imágenes de una sola vez
+    _, label_images = cluster(images, km)
 
-    # Remapear etiquetas del modelo al orden de centros ordenados
-    order = np.argsort(km.cluster_centers_.ravel())
-    remap = np.empty_like(order)
-    remap[order] = np.arange(n_clusters)
-
+    centers = km.cluster_centers_.ravel()
     ks = np.arange(256)
 
     for i, (img, name) in enumerate(zip(images, names)):
         r, c = i // n_cols, i % n_cols
         ax = axes[r, c]
 
-        flat = np.asarray(img).ravel().astype(float)
-
-        # Etiquetas (reordenadas) para esta imagen
-        labels = remap[km.predict(flat.reshape(-1, 1))]
+        flat = np.asarray(img).ravel()
+        labels = label_images[i].ravel()
 
         for k, lam in enumerate(centers):
             mask = labels == k
-            if not mask.any(): continue
+            if not mask.any():
+                continue
 
-            vals = flat[mask].astype(int)
-            counts_k = np.bincount(vals, minlength=256)
+            counts_k = np.bincount(flat[mask], minlength=256)
             N_k = mask.sum()
 
-            # Histograma del cluster (barras del color k)
             ax.bar(ks, counts_k, width=1, alpha=0.5, color=f"C{k}")
-
-            # PMF Poisson(lambda=centroide) escalada a frecuencias
             ax.plot(ks, N_k * poisson.pmf(ks, lam),
                     color=f"C{k}", lw=1.5,
                     label=rf"Poisson($\lambda$={lam:.1f})")
@@ -166,7 +155,6 @@ def plot_hists(images, names, km):
         ax.legend(fontsize=6)
         ax.set_xlim(0, 255)
 
-    # Apagar ejes vacíos
     for j in range(i + 1, n_cols * n_rows):
         r, c = j // n_cols, j % n_cols
         axes[r, c].axis("off")
