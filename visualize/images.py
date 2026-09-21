@@ -2,30 +2,22 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 
+from .utils import _axes_grid
 
 def show_images(images: list, names: list[str], show: bool = True,
                 suptitle: str = None, cmap="gray", **fig_kw):
     """Muestra una lista de imágenes."""
-
-    # calcular dimension de malla de imagenes
     n_images = len(images)
-    n_cols = int(np.ceil(np.sqrt(n_images)))
-    n_rows = int(np.ceil(n_images / n_cols))
-    
-    fig, axes = plt.subplots(nrows=n_rows,ncols=n_cols,squeeze=False,**fig_kw)
+
+    fig, axes = _axes_grid(n_images)
     if suptitle is not None: fig.suptitle(suptitle)
-    
-    for i, (img, name) in enumerate(zip(images, names)):
-        r, c = i // n_cols, i % n_cols
-        ax = axes[r, c]
+
+    for img, name, ax in zip(images, names, axes):
         ax.imshow(img, cmap=cmap) ; ax.set_title(name)
         ax.axis("off")
     
-    for j in range(i + 1, n_cols * n_rows):    # Apagar ejes vacíos
-        r, c = j // n_cols, j % n_cols
-        axes[r, c].axis("off")
-    
     if show: plt.show()
+
     return fig, axes
 
 

@@ -9,7 +9,7 @@ from ..config import MODELS_DIR as models_dir
 
 
 def main():
-    a, b = 100, 240    # rango de valores para entrenar km
+    a, b = 100, 245    # rango de valores para entrenar km
     clusters = 0
     images, names = read_images(images_dir + "aligned-images/")
 

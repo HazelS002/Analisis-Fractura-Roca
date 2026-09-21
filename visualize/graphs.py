@@ -9,6 +9,7 @@ from analysis.stats import estimate_params
 from analysis.clustering import cluster
 
 from visualize.images import show_images
+from visualize.utils import _axes_grid
 from data_process.utils.helpers import reshape_images
 
 def _plot_variance(pca):
@@ -58,110 +59,54 @@ def plot_pca(X_pca, pca, scaler, shape, names):
     return
 
 
-# def plot_hists(images, names, a=0, b=255):
-#     n_images = len(images)
-#     n_cols = int(np.ceil(np.sqrt(n_images)))
-#     n_rows = int(np.ceil(n_images / n_cols))
-
-#     fig, axes = plt.subplots(nrows=n_rows, ncols=n_cols, squeeze=False,
-#                              sharex=True, sharey=True)
-
-#     # Estimar parámetros de todas las imágenes (mismo orden que images)
-#     params = estimate_params(images, a=a, b=b)
-
-#     ks = np.arange(a, b + 1)   # valores de píxel a graficar
-
-#     for i, (img, name) in enumerate(zip(images, names)):
-#         r, c = i // n_cols, i % n_cols
-#         ax = axes[r, c]
-
-#         # Conteos y total de píxeles en el rango
-#         counts = np.bincount(img.ravel(), minlength=256)[a:b + 1]
-#         N = counts.sum()
-
-#         # Histograma
-#         ax.bar(ks, counts, width=1, alpha=0.5, label="Histogram")
-
-#         # Parámetros estimados de esta imagen
-#         lamb, n, p, _ = params[i]
-
-#         # PMF Poisson escalada a frecuencias
-#         ax.plot(ks, N * poisson.pmf(ks, lamb), color="C1", lw=1.5,
-#                 label=rf"Poisson({lamb:.2f})")
-
-#         # PMF Binomial escalada a frecuencias
-#         # Recordar: se ajustó con éxitos = x - a, n = b - a
-#         exitos = ks - a
-#         valid = (exitos >= 0) & (exitos <= n)
-#         ax.plot(ks[valid], N * binom.pmf(exitos[valid], n, p),
-#                 color="C2", lw=1.5, label=f"Binomial({n}, {p:.2f})")
-
-#         ax.set_title(name)
-#         ax.legend()
-
-#     # Apagar ejes vacíos
-#     for j in range(i + 1, n_cols * n_rows):
-#         r, c = j // n_cols, j % n_cols
-#         axes[r, c].axis("off")
-
-#     plt.show()
-#     return fig, axes, params
-
-
-def plot_hists(images, names, km):
-    """
-    Grafica el histograma de píxeles de cada imagen coloreado por cluster,
-    y superpone una Poisson(lambda) por cada cluster usando su centroide.
-
-    Recibe:
-        images : list[np.ndarray] (uint8, escala de grises)
-        names  : list[str]
-        km     : KMeans entrenado sobre píxeles 1D.
-    """
+def simple_hists(images, names, a=0, b=255):
     n_images = len(images)
-    n_cols = int(np.ceil(np.sqrt(n_images)))
-    n_rows = int(np.ceil(n_images / n_cols))
+    fig, axes = _axes_grid(n_images)
+    ks = np.arange(a, b+1)
 
-    fig, axes = plt.subplots(nrows=n_rows, ncols=n_cols, squeeze=False,
-                             sharex=True, sharey=True)
-
-    # Etiquetas para todas las imágenes de una sola vez
-    _, label_images = cluster(images, km)
-
-    centers = km.cluster_centers_.ravel()
-    ks = np.arange(256)
-
-    for i, (img, name) in enumerate(zip(images, names)):
-        r, c = i // n_cols, i % n_cols
-        ax = axes[r, c]
-
-        flat = np.asarray(img).ravel()
-        labels = label_images[i].ravel()
-
-        for k, lam in enumerate(centers):
-            mask = labels == k
-            if not mask.any():
-                continue
-
-            counts_k = np.bincount(flat[mask], minlength=256)
-            N_k = mask.sum()
-
-            ax.bar(ks, counts_k, width=1, alpha=0.5, color=f"C{k}")
-            ax.plot(ks, N_k * poisson.pmf(ks, lam),
-                    color=f"C{k}", lw=1.5,
-                    label=rf"Poisson($\lambda$={lam:.1f})")
+    for img, name, ax in zip(images, names, axes):
+        counts = np.bincount(img.ravel(), minlength=256)[a:b + 1]
+        N = counts.sum()
+        ax.bar(ks, counts, width=1, alpha=0.5, label="Histogram")
 
         ax.set_title(name)
-        ax.legend(fontsize=6)
-        ax.set_xlim(0, 255)
+        ax.legend()
 
-    for j in range(i + 1, n_cols * n_rows):
-        r, c = j // n_cols, j % n_cols
-        axes[r, c].axis("off")
-
-    plt.tight_layout()
     plt.show()
+
     return fig, axes
 
+
+def plot_hists(images, names, km, a=0, b=255):
+    n_images = len(images)
+    fig, axes = _axes_grid(n_images)
+
+    centers = km.cluster_centers_.ravel()
+    ks = np.arange(a, b+1)
+
+    _, labels = cluster(images, km, a=a, b=b)
+
+    for i, (img, name) in enumerate(zip(images, names)):
+        flat = np.asarray(img).ravel()
+
+        for k_cluster, lam in enumerate(centers):
+            mask = labels[i].ravel() == k_cluster
+
+            if not mask.any(): continue
+
+            counts_k = np.bincount(flat[mask], minlength=256)[a:b + 1]
+
+            axes[i].bar(ks, counts_k, width=1, alpha=0.5, color=f"C{k_cluster}")
+            axes[i].plot(ks, mask.sum() * poisson.pmf(ks, lam),
+                         color=f"C{k_cluster}", lw=1.5,
+                         label=rf"Poisson($\lambda$={lam:.1f})")
+
+        axes[i].set_title(name)
+        axes[i].legend(fontsize=6)
+
+    plt.show()
+
+    return fig, axes
+        
 
 if __name__ == "__main__": pass
