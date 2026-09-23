@@ -48,7 +48,7 @@ min_desp_response = 0.10
 #                                clean images                                  # 
 ################################################################################
 
-ksize_medianB = 33    # (or None)
+ksize_medianB = 101    # (or None)
 
 
 canny_kwargs = {

@@ -59,15 +59,15 @@ def plot_pca(X_pca, pca, scaler, shape, names):
     return
 
 
-def simple_hists(images, names, a=0, b=255):
+def simple_hists(images, names, a=0, b=255, density=True):
     n_images = len(images)
     fig, axes = _axes_grid(n_images)
-    ks = np.arange(a, b+1)
+
+    bin_edges = np.arange(a - 0.5, b + 1.5)
 
     for img, name, ax in zip(images, names, axes):
-        counts = np.bincount(img.ravel(), minlength=256)[a:b + 1]
-        N = counts.sum()
-        ax.bar(ks, counts, width=1, alpha=0.5, label="Histogram")
+        ax.hist(img.ravel(), bins=bin_edges, alpha=0.5,\
+            label="Intensity frequency", density=density)
 
         ax.set_title(name)
         ax.legend()
@@ -82,7 +82,8 @@ def plot_hists(images, names, km, a=0, b=255):
     fig, axes = _axes_grid(n_images)
 
     centers = km.cluster_centers_.ravel()
-    ks = np.arange(a, b+1)
+    ks = np.arange(a, b + 1)
+    bin_edges = np.arange(a - 0.5, b + 1.5)
 
     _, labels = cluster(images, km, a=a, b=b)
 
@@ -94,18 +95,16 @@ def plot_hists(images, names, km, a=0, b=255):
 
             if not mask.any(): continue
 
-            counts_k = np.bincount(flat[mask], minlength=256)[a:b + 1]
-
-            axes[i].bar(ks, counts_k, width=1, alpha=0.5, color=f"C{k_cluster}")
-            axes[i].plot(ks, mask.sum() * poisson.pmf(ks, lam),
-                         color=f"C{k_cluster}", lw=1.5,
-                         label=rf"Poisson($\lambda$={lam:.1f})")
+            axes[i].hist(flat[mask], bins=bin_edges, alpha=0.5,\
+                color=f"C{k_cluster}", label=f"Cluster {k_cluster}")
+            
+            axes[i].plot(ks, mask.sum() * poisson.pmf(ks, lam),\
+                color=f"C{k_cluster}", lw=1.5, label=rf"Poisson($\lambda$={lam:.1f})")
 
         axes[i].set_title(name)
         axes[i].legend(fontsize=6)
 
     plt.show()
-
     return fig, axes
         
 

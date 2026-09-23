@@ -1,45 +1,32 @@
 from visualize.images import show_images, animate_average, animate_images
-from visualize.graphs import plot_hists, simple_hists
 from analysis.stats import image_mean, image_median, image_std,\
     image_percentile
-from data_process.utils import read_images, select_sample
+from data_process.utils import read_images
 from data_process.clean_images import clean
 
-import joblib
-
 from ..config import PROCESSED_IMAGES_DIR as images_dir
-from ..config import MODELS_DIR as models_dir
 
 
 def main():
     images, names = read_images(images_dir + "aligned-images/")
     q = .95
-    a, b = 0, 255
 
-    # Analisis de frecuencias de pixeles
-    sample = select_sample(images, names, sample_size=9)
-    # km = joblib.load(models_dir + "km_pixel_clustering.joblib")
-    # plot_hists(*sample, km, a=a, b=b)
+    images = clean(images, copy=False)    # limpiar imagenes
 
-    simple_hists(*sample, a=a, b=b)
-
-    # images = clean(images, copy=False)    # limapiar imagenes
+    # Animaciones
+    animate_average(images, 20)    # Mostrar animacion de promediado
+    animate_images(images, 20)     # Animación de barrido de imagenes
 
 
-    # # Animaciones
-    # animate_average(images, 20)    # Mostrar animacion de promediado
-    # animate_images(images, 20)     # Animación de barrido de imagenes
+    # Estadisticas pixel a pixel
+    stats = [
+        (image_mean(images),          "Average Images"),
+        (image_median(images),        "Median Images"),
+        (image_std(images),           "Std Images"),
+        (image_percentile(images, q), f"Percentile {q} Image"),
+    ]
 
-
-    # # Estadisticas pixel a pixel
-    # stats = [
-    #     (image_mean(images),          "Average Images"),
-    #     (image_median(images),        "Median Images"),
-    #     (image_std(images),           "Std Images"),
-    #     (image_percentile(images, q), f"Percentile {q} Image"),
-    # ]
-
-    # show_images(*zip(*stats), suptitle="Images Stats")    # mostrar
+    show_images(*zip(*stats), suptitle="Images Stats")    # mostrar
 
     return
 
