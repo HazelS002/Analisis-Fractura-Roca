@@ -1,30 +1,16 @@
 import numpy as np
+from scipy.stats import truncnorm
 from sklearn.linear_model import LogisticRegression
 
 from .config import lr_kwargs, rimages_weight, fimages_weight
 
 
-
-def _create_poisson_images(shape: tuple[int, int], n_images: int,
-                          lam: float, random_state=42) -> list[np.ndarray]:
-    """
-    Genera imágenes aleatorias cuyos píxeles siguen una Poisson(lam).
-
-    Recibe:
-        shape        : tuple[int, int]. Dimensiones (alto, ancho).
-        n_images     : int. Número de imágenes a generar.
-        lam          : float. Parámetro lambda de la Poisson.
-        random_state : int. Semilla.
-
-    Devuelve:
-        list[np.ndarray] con imágenes uint8 en [0, 255].
-    """
-    rng = np.random.default_rng(random_state)
-
-    return [
-        rng.poisson(lam=lam, size=shape).clip(0, 255).astype(np.uint8)
-        for _ in range(n_images)
-    ]
+def _create_fake_images(shape: tuple[int, int], n_images: int, mean:
+    float, var: float):
+    a = (0 - mean) / var
+    b = (255 - mean) / var
+    return [ truncnorm.rvs(a, b, loc=mean, scale=var, size=shape)\
+        for _ in range(n_images) ]
 
 
 def create_data(images: list[np.ndarray], lam:float, shape, images_proportion:\
@@ -32,7 +18,8 @@ def create_data(images: list[np.ndarray], lam:float, shape, images_proportion:\
     
     # crear imagenes aleatorias
     n_fakeimages = int(np.round(images_proportion*len(images)))
-    fake_images = _create_poisson_images(shape, n_fakeimages, lam)
+    fake_images = _create_fake_images(shape, n_fakeimages, mean=143.171,
+        var=2334.5635)
 
     # concatenar y etiquetar imagenes
     all_images = images.copy() + fake_images

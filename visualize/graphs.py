@@ -125,10 +125,12 @@ def show_gmm(gmm_model, images, names, a=0, b=255):
             weight = gmm_model.weights_[i]
             
             # PDF de una Gaussiana individual
-            component_pdf = weight * (1 / np.sqrt(2 * np.pi * cov)) * np.exp(-0.5 * ((x_vals.ravel() - mean)**2) / cov)
-            ax.plot(x_vals, component_pdf, '--', label=f'Componente {i+1} (Media: {mean:.1f})')
+            component_pdf = weight*(1/np.sqrt(2*np.pi*cov))*np.exp(-0.5*((x_vals.ravel()-mean)**2)/cov)
+            ax.plot(x_vals, component_pdf, '--',\
+                label=f'Gaussian {i+1} (Mean: {mean:.1f}, Cov: {cov:.1f}, Weight: {weight:.1f})')
+            ax.legend()
 
-        ax.legend(fontsize=4)
+    fig.suptitle("Estimated Gaussian Distributions")
 
     plt.show()
     return

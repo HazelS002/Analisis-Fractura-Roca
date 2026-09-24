@@ -1,6 +1,8 @@
 from . import clean_images, ellipses
 from . import config
 
-__all__ = [
-    "clean_images", "ellipses", "config"
-]
+from .config import seed
+
+import numpy as np
+
+np.random.seed(seed)

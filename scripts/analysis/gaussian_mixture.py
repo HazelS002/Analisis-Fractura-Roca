@@ -7,7 +7,7 @@ from ..config import PROCESSED_IMAGES_DIR as images_dir
 from ..config import MODELS_DIR as models_dir
 
 def main():
-    n_componentes = 3
+    n_componentes = 2
     a, b = 0, 250
 
     # images, names = read_images(images_dir + "aligned-images/")

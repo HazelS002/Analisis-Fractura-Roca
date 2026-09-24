@@ -1,7 +1,7 @@
 import numpy as np
 
 
-
+seed = 42
 
 ## PCA config
 

@@ -31,8 +31,7 @@ def save_images(images:list[np.ndarray], names:list[str], dir:str) -> None:
     return
 
 
-def read_sample(dir, sample_size, image_size=None, random_state=42):
-    np.random.seed(random_state)
+def read_sample(dir, sample_size, image_size=None):
 
     lsdir = os.listdir(dir)
     names = np.random.choice(lsdir, size=sample_size, replace=False)
@@ -46,9 +45,7 @@ def read_sample(dir, sample_size, image_size=None, random_state=42):
     return images, names
 
 
-def select_sample(images, names, sample_size, random_state=42):
-    np.random.seed(random_state)
-
+def select_sample(images, names, sample_size):
     index = np.random.choice(range(len(images)), size=sample_size,\
                              replace=False)
 
