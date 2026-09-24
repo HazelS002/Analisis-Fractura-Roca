@@ -128,5 +128,10 @@ def restrict(image, a, b):
     x = x[(x >= a) & (x <= b)]
     return x
 
+def get_data(images, a, b):
+    X = np.concatenate([ restrict(img.copy(), a=a, b=b) for img in images ])\
+        .reshape(-1, 1)
+    return X
+
 
 if __name__ == "__main__": pass

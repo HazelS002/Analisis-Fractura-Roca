@@ -59,7 +59,7 @@ def plot_pca(X_pca, pca, scaler, shape, names):
     return
 
 
-def simple_hists(images, names, a=0, b=255, density=True):
+def simple_hists(images, names, a=0, b=255, density=True, show=True):
     n_images = len(images)
     fig, axes = _axes_grid(n_images)
 
@@ -72,7 +72,7 @@ def simple_hists(images, names, a=0, b=255, density=True):
         ax.set_title(name)
         ax.legend()
 
-    plt.show()
+    if show: plt.show()
 
     return fig, axes
 
@@ -107,5 +107,31 @@ def plot_hists(images, names, km, a=0, b=255):
     plt.show()
     return fig, axes
         
+
+def show_gmm(gmm_model, images, names, a=0, b=255):
+
+    fig, axes = simple_hists(images, names, a=a, b=b, density=True, show=False)
+
+    x_vals = np.linspace(a, b, 1000).reshape(-1, 1)
+    log_prob = gmm_model.score_samples(x_vals)
+    pdf = np.exp(log_prob)
+
+    for ax in axes:
+        ax.plot(x_vals, pdf, '-k', linewidth=2, label='GMM Total')
+
+        for i in range(gmm_model.n_components):
+            mean = gmm_model.means_[i][0]
+            cov = gmm_model.covariances_[i][0][0]
+            weight = gmm_model.weights_[i]
+            
+            # PDF de una Gaussiana individual
+            component_pdf = weight * (1 / np.sqrt(2 * np.pi * cov)) * np.exp(-0.5 * ((x_vals.ravel() - mean)**2) / cov)
+            ax.plot(x_vals, component_pdf, '--', label=f'Componente {i+1} (Media: {mean:.1f})')
+
+        ax.legend(fontsize=4)
+
+    plt.show()
+    return
+
 
 if __name__ == "__main__": pass

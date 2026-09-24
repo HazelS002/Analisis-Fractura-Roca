@@ -1,18 +1,13 @@
-from data_process.utils import restrict
+from data_process.utils import get_data
 from sklearn.cluster import KMeans
 import numpy as np
 
 from .config import km_kwargs
 
-def _get_data(images, a, b):
-    X = np.concatenate([ restrict(img.copy(), a=a, b=b) for img in images ])\
-        .reshape(-1, 1)
-    return X
-
 
 def fit_km(images, a=0, b=255):
     km = KMeans(**km_kwargs)
-    X = _get_data(images, a=a, b=b)
+    X = get_data(images, a=a, b=b)
     km.fit(X)
 
     return km
@@ -22,7 +17,7 @@ def cluster(images, km, a=0, b=255, background=255):
     n_images = len(images)
     shape = images[0].shape
 
-    X = _get_data(images, a=0, b=255)    # rango completo para reconstruir
+    X = get_data(images, a=0, b=255)    # rango completo para reconstruir
     mask = (X.ravel() >= a) & (X.ravel() <= b)    # máscara de rango
 
     labels = km.predict(X)
